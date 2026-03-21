@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Venue Booking App",
-  description: "An app for venue booking",
+  title: "Online Job Fair Registration",
+  description: "An app for job fair booking",
 };
 
 export default async function RootLayout({

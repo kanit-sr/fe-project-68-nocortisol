@@ -1,7 +1,8 @@
+"use client"
 import { useState } from "react";
 import { BookingItem } from "../../interfaces";
 
-export default async function AdminBookings({bookings}: {bookings: BookingItem[]}) {
+export default function AdminBookings({bookings}: {bookings: BookingItem[]}) {
   
     const [searchQuery, setSearchQuery] = useState("");
 

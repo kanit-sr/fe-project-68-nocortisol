@@ -3,7 +3,6 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    // Adjusted padding so the TopMenu doesn't cover our content
     <main className="relative min-h-screen bg-background flex flex-col justify-center pt-24 pb-12 overflow-hidden">      
     
       <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">        

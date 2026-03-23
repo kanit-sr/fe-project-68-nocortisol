@@ -1,11 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import TopMenuItem from "@/components/TopMenuItem";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-export default async function TopMenu() {
-    const session = await getServerSession(authOptions);
+export default function TopMenu() {
+    const { data: session } = useSession();
 
     return (
         <div className="bg-surface/90 backdrop-blur-md border-b border-surface-border fixed top-0 h-16 w-full z-50 shadow-sm transition-all">
@@ -59,7 +60,7 @@ export default async function TopMenu() {
 
                         : 
                         <Link 
-                            href="/api/auth/signin"
+                            href="/login"
                             className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-full font-bold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
                         >
                             Sign-In

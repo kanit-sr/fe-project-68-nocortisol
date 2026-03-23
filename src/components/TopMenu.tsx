@@ -16,8 +16,8 @@ export default function TopMenu() {
                 <div className="flex items-center gap-4 md:gap-8 shrink-0">
                     <Link href="/" className="shrink-0 mr-2">
                         <Image 
-                            src={"/img/logo.png"}
-                            className="h-12.5 w-auto cursor-pointer"
+                            src={"/images/JobFairLogo.png"}
+                            className="h-12.5 w-auto cursor-pointer rounded-xl"
                             alt="logo"
                             width={0}
                             height={0}

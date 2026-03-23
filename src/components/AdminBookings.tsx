@@ -80,12 +80,30 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                     filteredBookings.map((booking) => (
                         <div key={booking.id} className="bg-surface border border-surface-border rounded-xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
                             
-                            {/* Booking Details */}
-                            <div className="flex flex-col">
-                                <span className="font-bold text-lg text-foreground">{booking.user?.name || "Unknown User"}</span>
-                                <span className="text-sm text-foreground/60 font-medium">Interviewing with: <strong className="text-primary">{booking.company?.name || "Unknown Company"}</strong></span>
-                                <span className="text-xs text-foreground/50 mt-1">{ (new Date(booking.bookingDate)).toLocaleDateString() || "Unknown Date"}</span>
-                            </div>
+                                                        {/* Booking Details */}
+                                                        <div className="flex flex-col md:flex-row md:items-center gap-3">
+                                                                {booking.company?.id ? (
+                                                                    <img
+                                                                        src={`/images/${booking.company.id}.png`}
+                                                                        alt={booking.company.name + " logo"}
+                                                                        className="object-contain w-14 h-14 rounded-md border border-surface-border bg-surface mr-3"
+                                                                        onError={e => {
+                                                                            e.currentTarget.style.display = 'none';
+                                                                            const fallback = document.createElement('span');
+                                                                            fallback.className = 'text-foreground/50 font-bold text-center text-xs';
+                                                                            fallback.innerHTML = `LOGO<br />${booking.company?.name || 'Unknown'}`;
+                                                                            e.currentTarget.parentNode?.appendChild(fallback);
+                                                                        }}
+                                                                    />
+                                                                ) : (
+                                                                    <span className="text-foreground/50 font-bold text-center text-xs mr-3">LOGO<br />Unknown</span>
+                                                                )}
+                                                                <div className="flex flex-col">
+                                                                        <span className="font-bold text-lg text-foreground">{booking.user?.name || "Unknown User"}</span>
+                                                                        <span className="text-sm text-foreground/60 font-medium">Interviewing with: <strong className="text-primary">{booking.company?.name || "Unknown Company"}</strong></span>
+                                                                        <span className="text-xs text-foreground/50 mt-1">{ (new Date(booking.bookingDate)).toLocaleDateString() || "Unknown Date"}</span>
+                                                                </div>
+                                                        </div>
 
                             {/* Admin Action Buttons */}
                             <div className="flex gap-3 w-full md:w-auto">

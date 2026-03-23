@@ -15,8 +15,19 @@ export default function CompanyCard({ company, isLoggedIn }: Props) {
       {/* Top: logo + info side by side */}
       <div className="flex flex-1 p-3 gap-3">
         {/* Logo box */}
-        <div className="w-36 h-32 flex-shrink-0 rounded-lg bg-surface flex items-center justify-center text-center text-[11px] text-foreground/45 font-bold tracking-wide">
-          LOGO<br />{company.name}
+        <div className="w-36 h-32 flex-shrink-0 rounded-lg bg-surface flex items-center justify-center text-center text-[11px] text-foreground/45 font-bold tracking-wide overflow-hidden">
+          <img
+            src={`/images/${company.id}.png`}
+            alt={company.name + " logo"}
+            className="object-contain w-full h-full"
+            onError={e => {
+              e.currentTarget.style.display = 'none';
+              const fallback = document.createElement('span');
+              fallback.className = 'text-foreground/50 font-bold text-center text-sm';
+              fallback.innerHTML = `LOGO<br />${company.name}`;
+              e.currentTarget.parentNode?.appendChild(fallback);
+            }}
+          />
         </div>
 
         {/* Info */}

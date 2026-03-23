@@ -40,10 +40,19 @@ export default function UserCompanyDetail({
       </Link>
 
       <div className="flex flex-row gap-8 mb-6">
-        <div className="w-48 h-40 bg-surface-border rounded-xl flex items-center justify-center shrink-0">
-          <span className="text-foreground/50 font-bold text-center text-sm">
-            LOGO<br />{company.name}
-          </span>
+        <div className="w-48 h-40 bg-surface-border rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
+          <img
+            src={`/images/${company.id}.png`}
+            alt={company.name + " logo"}
+            className="object-contain w-full h-full"
+            onError={e => {
+              e.currentTarget.style.display = 'none';
+              const fallback = document.createElement('span');
+              fallback.className = 'text-foreground/50 font-bold text-center text-sm';
+              fallback.innerHTML = `LOGO<br />${company.name}`;
+              e.currentTarget.parentNode?.appendChild(fallback);
+            }}
+          />
         </div>
 
         <div className="flex flex-col gap-4 justify-center">
@@ -120,7 +129,7 @@ export default function UserCompanyDetail({
       {showBooking && (
         <div className="flex justify-center mt-4">
           {token ? (
-            <BookButton companyId={company.id} companyName={company.name} token={token} />
+            <BookButton company={company} token={token} />
           ) : (
             <p className="text-foreground/40 text-sm">
               Please{" "}

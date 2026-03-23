@@ -86,10 +86,25 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
                                     </span>
                                 </div>
                                 
-                                <div className="flex-1 flex flex-col items-center justify-center font-bold text-lg text-foreground/80 text-center">
-                                    <span>LOGO</span>
-                                    <span>{booking.company?.name || "Unknown Company"}</span>
-                                </div>
+                                                                <div className="flex-1 flex flex-col items-center justify-center font-bold text-lg text-foreground/80 text-center">
+                                                                        {booking.company?.id ? (
+                                                                            <img
+                                                                                src={`/images/${booking.company.id}.png`}
+                                                                                alt={booking.company.name + " logo"}
+                                                                                className="object-contain w-20 h-20 mb-2"
+                                                                                onError={e => {
+                                                                                    e.currentTarget.style.display = 'none';
+                                                                                    const fallback = document.createElement('span');
+                                                                                    fallback.className = 'text-foreground/50 font-bold text-center text-sm';
+                                                                                    fallback.innerHTML = `LOGO<br />${booking.company?.name || 'Unknown Company'}`;
+                                                                                    e.currentTarget.parentNode?.appendChild(fallback);
+                                                                                }}
+                                                                            />
+                                                                        ) : (
+                                                                            <span className="text-foreground/50 font-bold text-center text-sm mb-2">LOGO<br />Unknown</span>
+                                                                        )}
+                                                                        <span>{booking.company?.name || "Unknown Company"}</span>
+                                                                </div>
                             </div>
                             
                             <div className="bg-primary text-white p-6 pt-5 flex flex-col gap-2 text-xs md:text-sm font-bold">

@@ -138,7 +138,7 @@ export default function UpdateCompanyPanel({
                 className="hidden"
                 onChange={handleLogoChange}
               />
-              <span className="text-xs text-foreground/60">(Will be saved as <b>{company.id}.jpg</b> in public/images/)</span>
+              <span className="text-xs text-foreground/60">(Will be saved as <b>{company.id}.png</b> in public/images/)</span>
               {logoPreview ? (
                 <img
                   src={logoPreview}
@@ -148,7 +148,7 @@ export default function UpdateCompanyPanel({
                 />
               ) : (
                 <img
-                  src={`/images/${company.id}.jpg`}
+                  src={`/images/${company.id}.png`}
                   alt="Current logo"
                   className="mt-2 rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
                   style={{ background: 'var(--surface)' }}

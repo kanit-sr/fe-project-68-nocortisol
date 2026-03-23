@@ -1,5 +1,5 @@
 export default async function deleteCompany(id: string, token: string) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/companies/${id}`, {
+  const response = await fetch(`${process.env.BACKEND_URL}/api/v1/companies/${id}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,

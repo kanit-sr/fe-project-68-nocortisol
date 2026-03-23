@@ -2,6 +2,7 @@
 import deleteCompany from "@/libs/deleteCompany";
 import { CompanyItem } from "../../../interfaces";
 
+import { useState } from "react";
 export default function DeleteCompanyPanel({
   company,
   token,
@@ -13,13 +14,17 @@ export default function DeleteCompanyPanel({
   onClose: () => void;
   onDeleted: () => void;
 }) {
-
+  const [loading, setLoading] = useState(false);
   const handleDelete = async () => {
-    await deleteCompany(company.id, token);
-    onDeleted();
-    onClose();
+    setLoading(true);
+    try {
+      await deleteCompany(company.id, token);
+      onDeleted();
+      onClose();
+    } catch (err) {
+      setLoading(false);
+    }
   };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.4)' }}>
       <div
@@ -30,7 +35,11 @@ export default function DeleteCompanyPanel({
           border: '1px solid var(--surface-border)'
         }}
       >
-
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-surface/80 z-50 rounded-2xl">
+            <span className="text-primary font-bold text-lg animate-pulse">Deleting...</span>
+          </div>
+        )}
         {/* Close */}
         <button
           onClick={onClose}
@@ -39,7 +48,6 @@ export default function DeleteCompanyPanel({
         >
           ↩
         </button>
-
         {/* Title */}
         <h2
           className="text-3xl font-bold tracking-[0.2em] mb-5"
@@ -47,7 +55,6 @@ export default function DeleteCompanyPanel({
         >
           Delete Company
         </h2>
-
         {/* Subtitle */}
         <p
           className="text-sm tracking-[0.15em] mb-6"
@@ -55,7 +62,6 @@ export default function DeleteCompanyPanel({
         >
           Do you want to Delete company?
         </p>
-
         {/* Action */}
         <button
           onClick={handleDelete}
@@ -65,10 +71,10 @@ export default function DeleteCompanyPanel({
             color: 'white',
             border: 'none'
           }}
+          disabled={loading}
         >
           Delete
         </button>
-
       </div>
     </div>
   );

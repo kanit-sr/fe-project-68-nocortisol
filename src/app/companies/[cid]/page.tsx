@@ -132,7 +132,7 @@ export default async function CompanyDetailPage({ params }: { params: { cid: str
                     ) : (
                         <p className="text-foreground/40 text-sm">
                             Please{" "}
-                            <Link href="/login" className="text-primary hover:text-primary-hover hover:underline font-semibold">
+                            <Link href="/api/auth/login" className="text-primary hover:text-primary-hover hover:underline font-semibold">
                                 sign in
                             </Link>{" "}
                             to book an interview session.

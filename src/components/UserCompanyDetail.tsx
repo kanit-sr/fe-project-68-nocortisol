@@ -115,11 +115,20 @@ export default function UserCompanyDetail({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="bg-surface-border rounded-xl h-44 flex items-center justify-center"
+            className="bg-surface-border rounded-xl h-44 flex items-center justify-center overflow-hidden"
           >
-            <span className="text-foreground/50 font-bold text-center text-sm">
-              {company.name}<br />Picture
-            </span>
+            <img
+              src={`/images/${company.id}_pic${i}.png`}
+              alt={`${company.name} picture ${i}`}
+              className="object-contain w-full h-full"
+              onError={e => {
+                e.currentTarget.style.display = 'none';
+                const fallback = document.createElement('span');
+                fallback.className = 'text-foreground/50 font-bold text-center text-sm';
+                fallback.innerHTML = `${company.name}<br />Picture`;
+                e.currentTarget.parentNode?.appendChild(fallback);
+              }}
+            />
           </div>
         ))}
       </div>

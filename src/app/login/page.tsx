@@ -26,7 +26,8 @@ export default function LoginPage() {
     if (res?.error) {
       setError("Invalid email or password");
     } else {
-      router.push("/");
+      router.replace("/");
+      router.refresh();
     }
   };
 
@@ -109,7 +110,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-primary rounded px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -137,7 +138,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-primary rounded px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <div className="text-right mt-1">
                 <a

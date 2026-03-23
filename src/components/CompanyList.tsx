@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { CompanyItem } from "../../interfaces";
 import CompanyCard from "./CompanyCard";
@@ -43,16 +42,16 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
           </span>
           <input
             type="text"
-            placeholder="Find company"
+            placeholder="Search companies"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 border border-primary rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-11 pr-4 py-2.5 border border-primary rounded-full text-sm font-semibold tracking-widest text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
      {/* Section label */}
-        <div className="flex items-center gap-2 mb-4 text-primary font-semibold text-base border-b border-surface-border pb-3">
+        <div className="flex items-center gap-2 mb-4 text-primary font-bold tracking-widest uppercase text-base border-b border-surface-border pb-3">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5"
@@ -67,12 +66,12 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
             </svg>
-            Company
+            Companies
         </div>
 
       {/* 3-column grid */}
       {filtered.length === 0 ? (
-        <p className="text-center text-gray-400 py-16">No companies found.</p>
+        <p className="text-center text-sm font-semibold tracking-widest uppercase text-foreground/45 py-16">No companies found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((company) => (

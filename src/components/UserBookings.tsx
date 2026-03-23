@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { BookingItem, BookingResponse } from "../../interfaces";
-import UpdateBookingPanel from "@/components/UpdateBookingPanel";
-import DeleteBookingPanel from "@/components/DeleteBookingPanel";
+import UpdateBookingPanel from "@/components/modals/UpdateBookingPanel";
+import DeleteBookingPanel from "@/components/modals/DeleteBookingPanel";
 import removeBooking from "@/libs/removeBooking";
 import updateBooking from "@/libs/updateBooking";
 

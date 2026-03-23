@@ -3,23 +3,21 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { redirect } from "next/navigation";
 import getUserProfile from "@/libs/getUserProfile";
+import { Suspense } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
 
-export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/api/auth/signin");
-  }
+async function ProfileDataWrapper({ token }: { token: string }) {
+  const response = await getUserProfile(token);
+  const user = response.data;
 
-  const user = (await getUserProfile(session.user.token)).data;
   const role = user.role || "User";
   const name = user.name || "Userlnwza";
   const email = user.email || "User@gmail.com";
   const tel = user.tel || "0123456789";
 
   return (
-    <main className="min-h-screen bg-background flex flex-col items-center pt-32 md:pt-40 px-6">
-      
+    <>
       <div className="w-full max-w-3xl flex flex-col items-center z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
         
         <h1 className="text-3xl md:text-4xl font-extrabold text-primary tracking-widest uppercase mb-10 drop-shadow-sm">
@@ -59,6 +57,32 @@ export default async function ProfilePage() {
           priority
         />
       </div>
+    </>
+  );
+}
+
+export default async function ProfilePage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin");
+  }
+
+  return (
+    <main className="min-h-screen bg-background flex flex-col items-center pt-32 md:pt-40 px-6">
+      
+      <Suspense 
+        fallback={
+          <div className="w-full flex-1 flex flex-col items-center justify-center text-primary font-bold text-xl tracking-widest gap-4">
+            Loading Profile...
+            <div className="w-full max-w-md mt-4">
+              <LinearProgress color="warning" />
+            </div>
+          </div>
+        }
+      >
+        <ProfileDataWrapper token={session.user.token} />
+      </Suspense>
 
     </main>
   );

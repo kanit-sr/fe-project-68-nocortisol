@@ -1,5 +1,5 @@
 "use client";
-import { BookingItem } from "../../interfaces";
+import { BookingItem } from "../../../interfaces";
 
 export default function DeleteBookingPanel({ booking, onClose, onDelete }: { booking: BookingItem, onClose: () => void, onDelete: (e: React.MouseEvent) => void }) {
     return (

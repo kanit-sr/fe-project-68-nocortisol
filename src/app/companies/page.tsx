@@ -1,13 +1,20 @@
+import { Suspense } from "react";
+import { LinearProgress } from "@mui/material";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import getCompanies from "@/libs/getCompanies";
 import { CompanyItem } from "../../../interfaces";
 import CompanyList from "@/components/CompanyList";
 
-export default async function CompaniesPage() {
-  const session = await getServerSession(authOptions);
+async function CompaniesDataWrapper({ isLoggedIn }: { isLoggedIn: boolean }) {
   const companiesRes = await getCompanies();
   const companies: CompanyItem[] = companiesRes.data ?? [];
+
+  return <CompanyList companies={companies} isLoggedIn={isLoggedIn} />;
+}
+
+export default async function CompaniesPage() {
+  const session = await getServerSession(authOptions);
 
   return (
     <main className="min-h-screen bg-background">
@@ -23,9 +30,20 @@ export default async function CompaniesPage() {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-16">
-        <CompanyList companies={companies} isLoggedIn={!!session} />
-      </div>
+      <Suspense
+        fallback={
+          <div className="w-full min-h-screen flex flex-col items-center justify-center pt-32 px-6 text-primary font-bold text-xl tracking-widest gap-4">
+            Loading Companies...
+            <div className="w-full max-w-md">
+              <LinearProgress color="warning" />
+            </div>
+          </div>
+        }
+      >
+        <div className="max-w-7xl mx-auto px-4 pb-16">
+          <CompaniesDataWrapper isLoggedIn={!!session} />
+        </div>
+      </Suspense>
     </main>
   );
 }

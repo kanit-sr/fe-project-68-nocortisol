@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { redirect } from "next/navigation";
 import AdminBookings from "@/components/AdminBookings";
 import UserBookings from "@/components/UserBookings";
-import { redirect } from "next/navigation";
 import getBookings from "@/libs/getBookings";
 
 export default async function BookingsPage() {
@@ -12,11 +12,11 @@ export default async function BookingsPage() {
     redirect("/api/auth/signin");
   }
 
+  const bookingsResponse = await getBookings(session.user.token);
+
   if (session.user.role === "admin") {
-    const bookings = await getBookings(session.user.token);
-    return <AdminBookings bookings={bookings.data}/>;
+    return <AdminBookings bookingsResponse={bookingsResponse} adminToken={session.user.token}/>;
   }
 
-  const bookings = await getBookings(session.user.token);
-  return <UserBookings bookings={bookings.data}/>;
+  return <UserBookings bookingsResponse={bookingsResponse} userToken={session.user.token}/>;
 }

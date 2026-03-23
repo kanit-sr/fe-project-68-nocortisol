@@ -1,10 +1,27 @@
 "use client"
 import { useState } from "react";
-import { BookingItem } from "../../interfaces";
+import { BookingResponse, BookingItem } from "../../interfaces";
+import UpdateBookingPanel from "@/components/UpdateBookingPanel";
+import removeBooking from "@/libs/removeBooking";
+import updateBooking from "@/libs/updateBooking";
 
-export default function AdminBookings({bookings}: {bookings: BookingItem[]}) {
+export default function AdminBookings({bookingsResponse, adminToken}: {bookingsResponse: BookingResponse, adminToken: string}) {
   
     const [searchQuery, setSearchQuery] = useState("");
+    const [bookings, setBookings] = useState<BookingItem[]>(bookingsResponse?.data || []);
+    const [updatingBooking, setUpdatingBooking] = useState<BookingItem | null>(null);
+
+    const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
+        e.stopPropagation();
+        removeBooking(id, token);
+        setBookings((prev) => prev.filter((booking) => booking.id !== id));
+    };
+
+    const handleUpdate = async (e: React.MouseEvent, id: string, token: string, date: string) => {
+        e.stopPropagation();
+        updateBooking(id, token, date);
+        setBookings((prev) => prev.map((booking) => booking.id === id ? {...booking, bookingDate: date} : booking));
+    }
 
     const filteredBookings = bookings.filter((booking) => {
         const query = searchQuery.toLowerCase();
@@ -43,7 +60,7 @@ export default function AdminBookings({bookings}: {bookings: BookingItem[]}) {
 
                 {
                     filteredBookings.map((booking) => (
-                        <div className="bg-surface border border-surface-border rounded-xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div key={booking.id} className="bg-surface border border-surface-border rounded-xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
                             
                             {/* Booking Details */}
                             <div className="flex flex-col">
@@ -54,20 +71,33 @@ export default function AdminBookings({bookings}: {bookings: BookingItem[]}) {
 
                             {/* Admin Action Buttons */}
                             <div className="flex gap-3 w-full md:w-auto">
-                                <button className="flex-1 md:flex-none px-4 py-2 border-2 border-primary text-primary hover:bg-primary/10 rounded-lg font-bold text-sm transition-colors cursor-pointer">
+                                <button className="flex-1 md:flex-none px-4 py-2 border-2 border-primary text-primary hover:bg-primary/10 rounded-lg font-bold text-sm transition-colors cursor-pointer"
+                                    onClick={(e) => setUpdatingBooking(booking)}
+                                >
                                     Update
                                 </button>
-                                <button className="flex-1 md:flex-none px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-sm transition-colors cursor-pointer shadow-sm">
+                                <button className="flex-1 md:flex-none px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-sm transition-colors cursor-pointer shadow-sm"
+                                    onClick={(e) => handleDelete(e, booking.id, adminToken)}
+                                >
                                     Delete
                                 </button>
                             </div>
                         </div>
                     ))
                 }
-
                 </div>
 
             </div>
+            {
+                (updatingBooking !== null) && (
+                <UpdateBookingPanel 
+                    companyName={updatingBooking.company?.name || "Unknown Company"} 
+                    oldDate={updatingBooking.bookingDate}  
+                    onClose={() => setUpdatingBooking(null)} 
+                    onSubmit={(e, date) => { handleUpdate(e, updatingBooking.id, adminToken, date); setUpdatingBooking(null); }}
+                />)
+            }
+
         </main>
     );    
 }

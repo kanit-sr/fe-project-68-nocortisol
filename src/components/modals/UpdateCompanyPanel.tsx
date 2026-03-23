@@ -26,21 +26,28 @@ export default function UpdateCompanyPanel({
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logo upload will be handled in the future
-    await updateCompany(company.id, token, {
-      name,
-      description,
-      website,
-      tel,
-      address,
-      district,
-      province,
-      postalcode
-    });
-    onUpdated();
-    onClose();
+    setLoading(true);
+    try {
+      // Logo upload will be handled in the future
+      await updateCompany(company.id, token, {
+        name,
+        description,
+        website,
+        tel,
+        address,
+        district,
+        province,
+        postalcode
+      });
+      onUpdated();
+      onClose();
+    } catch (err) {
+      // Optionally handle error
+      setLoading(false);
+    }
   };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +74,11 @@ export default function UpdateCompanyPanel({
           border: '1px solid var(--surface-border)'
         }}
       >
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-surface/80 z-50 rounded-2xl">
+            <span className="text-primary font-bold text-lg animate-pulse">Updating...</span>
+          </div>
+        )}
 
         {/* Close */}
         <button

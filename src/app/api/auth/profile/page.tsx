@@ -48,9 +48,9 @@ async function ProfileDataWrapper({ token }: { token: string }) {
 
       </div>
 
-      <div className="mt-auto relative w-62.5 md:w-87.5 h-62.5 md:h-87.5 opacity-90 z-0 pointer-events-none mb-8">
+      <div className="mt-auto relative w-62.5 md:w-100 h-62.5 md:h-87.5 opacity-90 z-0 pointer-events-none">
         <Image 
-          src="/images/working-home.svg" 
+          src="/images/people-stance.svg" 
           alt="Profile Background Decoration"
           fill
           className="object-contain object-bottom"

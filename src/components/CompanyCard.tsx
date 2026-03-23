@@ -29,14 +29,29 @@ export default function CompanyCard({ company, isLoggedIn }: Props) {
             <span className="truncate">{company.name}</span>
           </div>
 
-          {/* Address */}
-          <div className="flex items-center gap-1.5 text-xs font-medium tracking-wide text-foreground/65">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          {/* Full Address (address, district, province, postalcode) */}
+          <div className="flex items-start gap-1.5 text-xs font-medium tracking-wide text-foreground/65">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span className="truncate">{company.address}</span>
+            <span className="line-clamp-2">
+              {company.address && `${company.address}, `}
+              {company.district && `${company.district}, `}
+              {company.province && `${company.province} `}
+              {company.postalcode && `${company.postalcode}`}
+            </span>
           </div>
+
+          {/* Website */}
+          {company.website && (
+            <div className="flex items-center gap-1.5 text-xs font-medium tracking-wide text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              <span className="truncate text-primary hover:underline">{company.website}</span>
+            </div>
+          )}
 
           {/* Tel */}
           <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-foreground/55">

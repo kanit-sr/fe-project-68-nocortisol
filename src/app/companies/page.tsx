@@ -1,14 +1,19 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import getCompanies from "@/libs/getCompanies";
-import { CompanyItem } from "../../../interfaces";
-import CompanyList from "@/components/CompanyList";
+import { Suspense } from "react";
+import { LinearProgress } from "@mui/material";
+import CompaniesContentLoader from "@/components/CompaniesContentLoader";
 
-export default async function CompaniesPage() {
-  const session = await getServerSession(authOptions);
-  const companiesRes = await getCompanies();
-  const companies: CompanyItem[] = companiesRes.data ?? [];
+function CompaniesLoadingFallback() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 pb-16">
+      <LinearProgress color="warning" />
+      <div className="py-16 text-center text-foreground/45">
+        Loading companies...
+      </div>
+    </div>
+  );
+}
 
+export default function CompaniesPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="text-center pt-24 pb-6">
@@ -23,9 +28,11 @@ export default async function CompaniesPage() {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-16">
-        <CompanyList companies={companies} isLoggedIn={!!session} />
-      </div>
+      <Suspense fallback={<CompaniesLoadingFallback />}>
+        <div className="max-w-7xl mx-auto px-4 pb-16">
+          <CompaniesContentLoader />
+        </div>
+      </Suspense>
     </main>
   );
 }

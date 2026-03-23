@@ -1,6 +1,6 @@
 "use client"
-import removeBooking from "@/libs/removeBooking";
-import addBooking from "@/libs/addBooking";
+import removeBooking from "@/libs/deleteBooking";
+import addBooking from "@/libs/createBooking";
 import { BookingItem, BookingResponse, CompanyItem } from "../../../interfaces";
 import { useState } from "react";
 import getBookings from "@/libs/getBookings";

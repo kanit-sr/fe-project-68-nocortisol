@@ -5,7 +5,7 @@ import { useState } from "react";
 import { BookingItem, BookingResponse } from "../../interfaces";
 import UpdateBookingPanel from "@/components/modals/UpdateBookingPanel";
 import DeleteBookingPanel from "@/components/modals/DeleteBookingPanel";
-import removeBooking from "@/libs/removeBooking";
+import deleteBooking from "@/libs/deleteBooking";
 import updateBooking from "@/libs/updateBooking";
 
 export default function UserBookings({ bookingsResponse, userToken }: { bookingsResponse: BookingResponse, userToken: string }) {
@@ -17,7 +17,7 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
     const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
         e.preventDefault();
         e.stopPropagation();
-        removeBooking(id, token);
+        deleteBooking(id, token);
         setBookings((prev) => prev.filter((booking) => booking.id !== id));
     };
 

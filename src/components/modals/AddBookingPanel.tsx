@@ -4,18 +4,22 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import createBooking from "@/libs/createBooking";
 import { CompanyItem } from "../../../interfaces";
+import { useAppSelector } from "@/redux/store";
 
-export default function AddBookingPanel({ company, currentBookingCount, token, onClose }: {
+export default function AddBookingPanel({ company, token, onClose }: {
     company: CompanyItem,
-    currentBookingCount: number,
     token: string,
     onClose: () => void,
 }) {
+
+  const router = useRouter();
+
+  const currentBookingCount = useAppSelector(state => state.bookings.bookingItems.length);
+
   const [selectedDate, setSelectedDate] = useState<string>("10");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   
-  const router = useRouter();
-  
+
   const dates: string[] = ["10", "11", "12", "13"];
   const isLimitReached = currentBookingCount >= 3;
 

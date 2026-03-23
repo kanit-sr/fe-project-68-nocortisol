@@ -14,5 +14,5 @@ export default async function getBooking(id: string, token: string): Promise<Boo
         throw new Error("Failed to fetch booking");
     }
 
-    return await response.json();
+    return (await response.json()).data;
 }

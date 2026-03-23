@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default async function CompanyDetailPage({ params }: { params: { cid: string } }) {
     const session = await getServerSession(authOptions);
-    const company: CompanyItem = await getCompany(params.cid);
+    const company = await getCompany(params.cid);
 
     return (
         <main className="relative min-h-screen bg-background flex flex-col items-center pt-24 pb-12">
@@ -102,7 +102,7 @@ export default async function CompanyDetailPage({ params }: { params: { cid: str
                             <path d="M8 13h8"/>
                             <path d="M8 17h8"/>
                         </svg>
-                        <span className="font-bold text-base text-foreground">Description {company.name}</span>
+                        <span className="font-bold text-base text-foreground">Description {company.description}</span>
                     </div>
                     <p className="text-foreground/60 text-sm leading-relaxed">
                         {company.description}

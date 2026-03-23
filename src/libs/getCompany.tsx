@@ -7,5 +7,5 @@ export default async function getCompany(id: string): Promise<CompanyItem>{
         throw new Error("Failed to fetch company");
     }
 
-    return await response.json();
+    return (await response.json()).data;
 }

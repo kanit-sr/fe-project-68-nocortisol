@@ -2,7 +2,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
 import createBooking from "@/libs/createBooking";
+=======
+import addBooking from "@/libs/createBooking";
+>>>>>>> f91f8f3a1e781c419e2a536ac5fb28e6adea7671
 import { CompanyItem } from "../../../interfaces";
 
 export default function AddBookingPanel({ company, currentBookingCount, token, onClose }: {

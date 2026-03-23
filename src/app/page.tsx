@@ -21,7 +21,7 @@ export default function Home() {
             </p>
 
             <div className="pt-4 flex justify-center md:justify-start">
-              <Link href="/booking">
+              <Link href="/companies">
                 <button className="bg-primary hover:bg-primary-hover text-white px-12 py-4 rounded-full font-bold text-lg tracking-widest uppercase shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer">
                   Booking
                 </button>

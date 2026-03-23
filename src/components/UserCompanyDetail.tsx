@@ -110,7 +110,7 @@ export default function UserCompanyDetail({
             <path d="M8 13h8"/>
             <path d="M8 17h8"/>
           </svg>
-          <span className="font-bold text-base text-foreground">Description {company.name}</span>
+          <span className="font-bold text-base text-foreground">Description</span>
         </div>
         <p className="text-foreground/60 text-sm leading-relaxed font-medium">
           {company.description}
@@ -118,7 +118,7 @@ export default function UserCompanyDetail({
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        {[1, 2, 3].map((i: number) => (
+        {[0, 1, 2].map((i: number) => (
           <div
             key={i}
             className="bg-background border border-surface-border rounded-2xl aspect-square flex items-center justify-center overflow-hidden shadow-sm"

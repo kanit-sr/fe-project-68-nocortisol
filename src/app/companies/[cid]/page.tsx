@@ -4,7 +4,7 @@ import getCompany from "@/libs/getCompany";
 import AdminCompanyDetail from "@/components/AdminCompanyDetail";
 import UserCompanyDetail from "@/components/UserCompanyDetail";
 
-export default async function CompanyDetailPage({ params }) {
+export default async function CompanyDetailPage({ params }: { params: { cid: string } }) {
   const session = await getServerSession(authOptions);
   const company = await getCompany(params.cid);
 

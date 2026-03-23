@@ -1,6 +1,6 @@
 "use client"
-import removeBooking from "@/libs/removeBooking";
-import addBooking from "@/libs/addBooking";
+import deleteBooking from "@/libs/deleteBooking";
+import createBooking from "@/libs/createBooking";
 import { BookingItem, BookingResponse, CompanyItem } from "../../../interfaces";
 import { useState } from "react";
 import getBookings from "@/libs/getBookings";
@@ -25,7 +25,7 @@ export default function BookingList({
     setPendingBooking({ companyName: company.name ,date: "2022-05-10", userRole: "Admin" });
 
     try {
-      await addBooking(company.id, adminToken, "2022-05-10");
+      await createBooking(company.id, adminToken, "2022-05-10");
       const bookingsRes = await getBookings(adminToken);
       
       setBookings(bookingsRes.data);
@@ -41,7 +41,7 @@ export default function BookingList({
     setPendingBooking({ companyName: company.name, date: "2022-05-10", userRole: "User" });
 
     try {
-      await addBooking(company.id, userToken, "2022-05-10");
+      await createBooking(company.id, userToken, "2022-05-10");
       const bookingsRes = await getBookings(adminToken);
       
       setBookings(bookingsRes.data);
@@ -55,7 +55,7 @@ export default function BookingList({
 
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    removeBooking(id, adminToken);
+    deleteBooking(id, adminToken);
     setBookings((prev) => prev.filter((booking) => booking.id !== id));
     setBookingCount((prevCount) => prevCount - 1);
   };

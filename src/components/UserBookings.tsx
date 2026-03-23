@@ -1,31 +1,46 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BookingItem, BookingResponse } from "../../interfaces";
 import UpdateBookingPanel from "@/components/modals/UpdateBookingPanel";
 import DeleteBookingPanel from "@/components/modals/DeleteBookingPanel";
-import removeBooking from "@/libs/removeBooking";
+import deleteBooking from "@/libs/deleteBooking";
 import updateBooking from "@/libs/updateBooking";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { setBookings, removeBooking } from "@/redux/features/bookingSlice";
 
 export default function UserBookings({ bookingsResponse, userToken }: { bookingsResponse: BookingResponse, userToken: string }) {
     
-    const [bookings, setBookings] = useState<BookingItem[]>(bookingsResponse?.data || []);
+    const bookings = useAppSelector(state => state.bookings.bookingItems);
+    const dispatch = useDispatch<AppDispatch>();
+    
     const [updatingBooking, setUpdatingBooking] = useState<BookingItem | null>(null);
     const [deletingBooking, setDeletingBooking] = useState<BookingItem | null>(null);
 
-    const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
+    useEffect(() => {
+        if (bookingsResponse?.data) {
+            dispatch(setBookings(bookingsResponse.data));
+        }
+    }, [bookingsResponse, dispatch]);
+
+
+    const handleDelete = (e: React.MouseEvent, target: BookingItem, token: string) => {
         e.preventDefault();
         e.stopPropagation();
-        removeBooking(id, token);
-        setBookings((prev) => prev.filter((booking) => booking.id !== id));
+        deleteBooking(target.id, token);
+        
+        dispatch(removeBooking(target));
     };
 
-    const handleUpdate = async (e: React.MouseEvent, id: string, token: string, date: string) => {
+    const handleUpdate = async (e: React.MouseEvent, target: BookingItem, token: string, date: string) => {
         e.preventDefault();
         e.stopPropagation();
-        updateBooking(id, token, date);
-        setBookings((prev) => prev.map((booking) => booking.id === id ? { ...booking, bookingDate: date } : booking));
+        updateBooking(target.id, token, date);
+
+        const updatedBooking = bookings.map((booking) => booking.id === target.id ? { ...booking, bookingDate: date } : booking);
+        dispatch(setBookings(updatedBooking));
     };
 
     return (
@@ -114,7 +129,7 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
                         </Link>
                     ))}
 
-                    {bookings.length < 3 && Array.from({ length: 3 - bookings.length }).map((_, index: number) => (
+                    {bookings.length < 3 && Array.from({ length: 3 - bookings.length }).map((_, index) => (
                         <Link key={index} href="/companies" className="group bg-surface border-2 border-surface-border hover:border-primary rounded-4xl flex flex-col shadow-sm hover:shadow-lg transition-all duration-300 w-full max-w-85 h-105 cursor-pointer overflow-hidden">
                             
                             <div className="flex-1 flex items-center justify-center group-hover:bg-primary/5 transition-colors duration-300">
@@ -147,7 +162,7 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
                     companyName={updatingBooking.company?.name || "Unknown Company"} 
                     oldDate={updatingBooking.bookingDate}  
                     onClose={() => setUpdatingBooking(null)} 
-                    onUpdate={(e: React.MouseEvent, date: string) => { handleUpdate(e, updatingBooking.id, userToken, date); setUpdatingBooking(null); }}
+                    onUpdate={(e: React.MouseEvent, date: string) => { handleUpdate(e, updatingBooking, userToken, date); setUpdatingBooking(null); }}
                 />
             )}
 
@@ -155,7 +170,7 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
                 <DeleteBookingPanel 
                     booking={deletingBooking} 
                     onClose={() => setDeletingBooking(null)} 
-                    onDelete={(e: React.MouseEvent) => { handleDelete(e, deletingBooking.id, userToken); setDeletingBooking(null); }}
+                    onDelete={(e: React.MouseEvent) => { handleDelete(e, deletingBooking, userToken); setDeletingBooking(null); }}
                 />
             )}
 

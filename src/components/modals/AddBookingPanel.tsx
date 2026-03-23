@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import addBooking from "@/libs/addBooking";
+import createBooking from "@/libs/createBooking";
 import { CompanyItem } from "../../../interfaces";
 
 export default function AddBookingPanel({ company, currentBookingCount, token, onClose }: {
@@ -28,7 +28,7 @@ export default function AddBookingPanel({ company, currentBookingCount, token, o
     setIsSubmitting(true);
     
     try {
-        await addBooking(company.id, token, "2022-05-" + selectedDate);
+        await createBooking(company.id, token, "2022-05-" + selectedDate);
         onClose();
         router.push("/bookings");
     } catch (error) {

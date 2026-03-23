@@ -1,30 +1,45 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BookingResponse, BookingItem } from "../../interfaces";
 import UpdateBookingPanel from "@/components/modals/UpdateBookingPanel";
 import DeleteBookingPanel from "@/components/modals/DeleteBookingPanel";
-import removeBooking from "@/libs/removeBooking";
+import deleteBooking from "@/libs/deleteBooking";
 import updateBooking from "@/libs/updateBooking";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { setBookings, removeBooking } from "@/redux/features/bookingSlice";
 
 export default function AdminBookings({bookingsResponse, adminToken}: {bookingsResponse: BookingResponse, adminToken: string}) {
   
+    const bookings = useAppSelector(state => state.bookings.bookingItems);
+    const dispatch = useDispatch<AppDispatch>();
+
     const [searchQuery, setSearchQuery] = useState("");
-    const [bookings, setBookings] = useState<BookingItem[]>(bookingsResponse?.data || []);
     const [updatingBooking, setUpdatingBooking] = useState<BookingItem | null>(null);
     const [deletingBooking, setDeletingBooking] = useState<BookingItem | null>(null);
 
+    useEffect(() => {
+        if (bookingsResponse?.data) {
+            dispatch(setBookings(bookingsResponse.data));
+        }
+    }, [bookingsResponse, dispatch]);
 
-    const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
+    const handleDelete = (e: React.MouseEvent, target: BookingItem, token: string) => {
+        e.preventDefault();
         e.stopPropagation();
-        removeBooking(id, token);
-        setBookings((prev) => prev.filter((booking) => booking.id !== id));
+        deleteBooking(target.id, token);
+
+        dispatch(removeBooking(target));
     };
 
-    const handleUpdate = async (e: React.MouseEvent, id: string, token: string, date: string) => {
+    const handleUpdate = async (e: React.MouseEvent, target: BookingItem, token: string, date: string) => {
+        e.preventDefault();
         e.stopPropagation();
-        updateBooking(id, token, date);
-        setBookings((prev) => prev.map((booking) => booking.id === id ? {...booking, bookingDate: date} : booking));
-    }
+        updateBooking(target.id, token, date);
+
+        const updatedBooking = bookings.map((booking) => booking.id === target.id ? { ...booking, bookingDate: date } : booking);
+        dispatch(setBookings(updatedBooking));
+    };
 
     const filteredBookings = bookings.filter((booking) => {
         const query = searchQuery.toLowerCase();
@@ -97,7 +112,7 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                     companyName={updatingBooking.company?.name || "Unknown Company"} 
                     oldDate={updatingBooking.bookingDate}  
                     onClose={() => setUpdatingBooking(null)} 
-                    onUpdate={(e, date) => { handleUpdate(e, updatingBooking.id, adminToken, date); setUpdatingBooking(null); }}
+                    onUpdate={(e, date) => { handleUpdate(e, updatingBooking, adminToken, date); setUpdatingBooking(null); }}
                 />)
             }
 
@@ -106,7 +121,7 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                 <DeleteBookingPanel 
                     booking={deletingBooking} 
                     onClose={() => setDeletingBooking(null)} 
-                    onDelete={(e) => { handleDelete(e, deletingBooking.id, adminToken); setDeletingBooking(null); }}
+                    onDelete={(e) => { handleDelete(e, deletingBooking, adminToken); setDeletingBooking(null); }}
                 />)
             }
 

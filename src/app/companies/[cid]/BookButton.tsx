@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import addBooking from "@/libs/addBooking";
+import createBooking from "@/libs/createBooking";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -29,7 +29,7 @@ export default function BookButton({
         setIsSubmitting(true);
         
         try {
-            await addBooking(companyId, token, "2022-05-" + selectedDate);
+            await createBooking(companyId, token, "2022-05-" + selectedDate);
             setIsBooking(false);
             router.push("/bookings");
         } catch (error) {

@@ -4,12 +4,8 @@ import { useState } from "react";
 import { CompanyItem } from "../../interfaces";
 import CompanyCard from "./CompanyCard";
 
-interface Props {
-  companies: CompanyItem[];
-  isLoggedIn: boolean;
-}
 
-export default function CompanyList({ companies, isLoggedIn }: Props) {
+export default function CompanyList({ companies }: { companies: CompanyItem[] }) {
   const [query, setQuery] = useState("");
 
   const filtered = companies.filter(
@@ -78,7 +74,6 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
             <CompanyCard
               key={company.id}
               company={company}
-              isLoggedIn={isLoggedIn}
             />
           ))}
         </div>

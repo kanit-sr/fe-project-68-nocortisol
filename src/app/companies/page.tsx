@@ -6,15 +6,14 @@ import getCompanies from "@/libs/getCompanies";
 import { CompanyItem } from "../../../interfaces";
 import CompanyList from "@/components/CompanyList";
 
-async function CompaniesDataWrapper({ isLoggedIn }: { isLoggedIn: boolean }) {
+async function CompaniesDataWrapper() {
   const companiesRes = await getCompanies();
   const companies: CompanyItem[] = companiesRes.data ?? [];
 
-  return <CompanyList companies={companies} isLoggedIn={isLoggedIn} />;
+  return <CompanyList companies={companies} />;
 }
 
-export default async function CompaniesPage() {
-  const session = await getServerSession(authOptions);
+export default function CompaniesPage() {
 
   return (
     <main className="min-h-screen bg-background">
@@ -41,7 +40,7 @@ export default async function CompaniesPage() {
         }
       >
         <div className="max-w-7xl mx-auto px-4 pb-16">
-          <CompaniesDataWrapper isLoggedIn={!!session} />
+          <CompaniesDataWrapper/>
         </div>
       </Suspense>
     </main>

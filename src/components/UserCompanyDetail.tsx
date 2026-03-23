@@ -2,6 +2,7 @@
 import { CompanyItem } from "../../interfaces";
 import BookButton from "./BookButton";
 import Link from "next/link";
+import Image from "next/image";
 import { ReactNode } from "react";
 
 export default function UserCompanyDetail({
@@ -15,7 +16,7 @@ export default function UserCompanyDetail({
   showBooking?: boolean;
   footerActions?: ReactNode;
 }) {
-  const iconClassName = "w-5 h-5 text-primary shrink-0";
+  const iconClassName: string = "w-5 h-5 text-primary shrink-0";
   const iconProps = {
     fill: "none",
     viewBox: "0 0 24 24",
@@ -40,18 +41,23 @@ export default function UserCompanyDetail({
       </Link>
 
       <div className="flex flex-row gap-8 mb-6">
-        <div className="w-48 h-40 bg-surface-border rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-          <img
+        
+        <div className="w-40 h-40 bg-background border border-surface-border rounded-2xl flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+          <Image
             src={`/images/${company.id}.png`}
             alt={company.name + " logo"}
-            className="object-contain w-full h-full"
-            onError={e => {
+            className="object-cover w-full h-full"
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
               e.currentTarget.style.display = 'none';
-              const fallback = document.createElement('span');
+              const fallback: HTMLSpanElement = document.createElement('span');
               fallback.className = 'text-foreground/50 font-bold text-center text-sm';
               fallback.innerHTML = `LOGO<br />${company.name}`;
               e.currentTarget.parentNode?.appendChild(fallback);
             }}
+            width={0}
+            height={0}
+            sizes="100vw"
+            priority
           />
         </div>
 
@@ -60,7 +66,7 @@ export default function UserCompanyDetail({
             <svg className={iconClassName} {...iconProps}>
               <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5"/>
             </svg>
-            <span className="text-base font-medium text-foreground">{company.name}</span>
+            <span className="text-base font-bold text-foreground">{company.name}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -68,7 +74,7 @@ export default function UserCompanyDetail({
               <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
-            <span className="text-base text-foreground">
+            <span className="text-base text-foreground font-medium">
               {company.address}, {company.district}, {company.province} {company.postalcode}
             </span>
           </div>
@@ -81,7 +87,7 @@ export default function UserCompanyDetail({
               href={company.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-base text-primary hover:text-primary-hover hover:underline"
+              className="text-base text-primary font-medium hover:text-primary-hover hover:underline"
             >
               {company.website}
             </a>
@@ -91,7 +97,7 @@ export default function UserCompanyDetail({
             <svg className={iconClassName} {...iconProps}>
               <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
             </svg>
-            <span className="text-base text-foreground">{company.tel}</span>
+            <span className="text-base font-medium text-foreground">{company.tel}</span>
           </div>
         </div>
       </div>
@@ -106,28 +112,32 @@ export default function UserCompanyDetail({
           </svg>
           <span className="font-bold text-base text-foreground">Description {company.name}</span>
         </div>
-        <p className="text-foreground/60 text-sm leading-relaxed">
+        <p className="text-foreground/60 text-sm leading-relaxed font-medium">
           {company.description}
         </p>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        {[1, 2, 3].map((i) => (
+        {[1, 2, 3].map((i: number) => (
           <div
             key={i}
-            className="bg-surface-border rounded-xl h-44 flex items-center justify-center overflow-hidden"
+            className="bg-background border border-surface-border rounded-2xl aspect-square flex items-center justify-center overflow-hidden shadow-sm"
           >
-            <img
+            <Image
               src={`/images/${company.id}_pic${i}.png`}
               alt={`${company.name} picture ${i}`}
-              className="object-contain w-full h-full"
-              onError={e => {
+              className="object-cover w-full h-full rounded-xl"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                 e.currentTarget.style.display = 'none';
-                const fallback = document.createElement('span');
+                const fallback: HTMLSpanElement = document.createElement('span');
                 fallback.className = 'text-foreground/50 font-bold text-center text-sm';
                 fallback.innerHTML = `${company.name}<br />Picture`;
                 e.currentTarget.parentNode?.appendChild(fallback);
               }}
+              width={0}
+              height={0}
+              sizes="100vw"
+              priority
             />
           </div>
         ))}
@@ -140,9 +150,9 @@ export default function UserCompanyDetail({
           {token ? (
             <BookButton company={company} token={token} />
           ) : (
-            <p className="text-foreground/40 text-sm">
+            <p className="text-foreground/40 text-sm font-medium">
               Please{" "}
-              <Link href="/api/auth/login" className="text-primary hover:text-primary-hover hover:underline font-semibold">
+              <Link href="/api/auth/login" className="text-primary hover:text-primary-hover hover:underline font-bold">
                 sign in
               </Link>{" "}
               to book an interview session.

@@ -67,7 +67,7 @@ export default function UserBookings({ bookingsResponse, userToken }: { bookings
                                         {booking.company?.name || "Unknown"}
                                     </span>
                                     <span className="tracking-widest uppercase">
-                                        May {booking.bookingDate.split("-")[2].split("T")[0]} 2026
+                                        May {booking.bookingDate.split("-")[2].split("T")[0]} 2022
                                     </span>
                                 </div>
                                 

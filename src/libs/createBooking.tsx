@@ -1,6 +1,6 @@
 import getUserProfile from "./getUserProfile";
 
-export default async function addBooking(companyId: string, token: string, bookingDate: string) {
+export default async function createBooking(companyId: string, token: string, bookingDate: string) {
     
     const userId = (await getUserProfile(token)).data.id;
     

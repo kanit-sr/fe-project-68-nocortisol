@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { BookingResponse, BookingItem } from "../../interfaces";
 import UpdateBookingPanel from "@/components/UpdateBookingPanel";
+import DeleteBookingPanel from "@/components/DeleteBookingPanel";
 import removeBooking from "@/libs/removeBooking";
 import updateBooking from "@/libs/updateBooking";
 
@@ -10,6 +11,8 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
     const [searchQuery, setSearchQuery] = useState("");
     const [bookings, setBookings] = useState<BookingItem[]>(bookingsResponse?.data || []);
     const [updatingBooking, setUpdatingBooking] = useState<BookingItem | null>(null);
+    const [deletingBooking, setDeletingBooking] = useState<BookingItem | null>(null);
+
 
     const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
         e.stopPropagation();
@@ -77,7 +80,7 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                                     Update
                                 </button>
                                 <button className="flex-1 md:flex-none px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-sm transition-colors cursor-pointer shadow-sm"
-                                    onClick={(e) => handleDelete(e, booking.id, adminToken)}
+                                    onClick={(e) => setDeletingBooking(booking)}
                                 >
                                     Delete
                                 </button>
@@ -94,7 +97,16 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                     companyName={updatingBooking.company?.name || "Unknown Company"} 
                     oldDate={updatingBooking.bookingDate}  
                     onClose={() => setUpdatingBooking(null)} 
-                    onSubmit={(e, date) => { handleUpdate(e, updatingBooking.id, adminToken, date); setUpdatingBooking(null); }}
+                    onUpdate={(e, date) => { handleUpdate(e, updatingBooking.id, adminToken, date); setUpdatingBooking(null); }}
+                />)
+            }
+
+            {   
+                (deletingBooking !== null) && (
+                <DeleteBookingPanel 
+                    booking={deletingBooking} 
+                    onClose={() => setDeletingBooking(null)} 
+                    onDelete={(e) => { handleDelete(e, deletingBooking.id, adminToken); setDeletingBooking(null); }}
                 />)
             }
 

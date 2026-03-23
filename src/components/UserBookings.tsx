@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BookingItem, BookingResponse } from "../../interfaces";
 import { useState } from "react";
 import UpdateBookingPanel from "@/components/UpdateBookingPanel";
+import DeleteBookingPanel from "@/components/DeleteBookingPanel";
 import removeBooking from "@/libs/removeBooking";
 import updateBooking from "@/libs/updateBooking";
 
@@ -11,6 +12,7 @@ export default function UserBookings({bookingsResponse, userToken}: {bookingsRes
 
     const [bookings, setBookings] = useState<BookingItem[]>(bookingsResponse?.data || []);
     const [updatingBooking, setUpdatingBooking] = useState<BookingItem | null>(null);
+    const [deletingBooking, setDeletingBooking] = useState<BookingItem | null>(null);
 
     const handleDelete = (e: React.MouseEvent, id: string, token: string) => {
         e.stopPropagation();
@@ -71,7 +73,7 @@ export default function UserBookings({bookingsResponse, userToken}: {bookingsRes
                             </div>
                             
                             <div className="flex justify-between items-end text-[10px] font-bold tracking-wider uppercase">
-                                <span>May {booking.bookingDate.split("-")[2].split("T")[0]} 2022</span>
+                                <span>May {booking.bookingDate.split("-")[2].split("T")[0]}, 2022</span>
                                 <div className="flex gap-3">
                                 {/* Edit Icon */}
                                 <svg className="w-4 h-4 hover:text-white/70 cursor-pointer transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -81,7 +83,7 @@ export default function UserBookings({bookingsResponse, userToken}: {bookingsRes
                                 </svg>
                                 {/* Delete Icon */}
                                 <svg className="w-4 h-4 hover:text-white/70 cursor-pointer transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" 
-                                    onClick={(e) => handleDelete(e, booking.id, userToken)}
+                                    onClick={(e) => {e.stopPropagation(); setDeletingBooking(booking);}}
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -117,7 +119,16 @@ export default function UserBookings({bookingsResponse, userToken}: {bookingsRes
                 companyName={updatingBooking.company?.name || "Unknown Company"} 
                 oldDate={updatingBooking.bookingDate}  
                 onClose={() => setUpdatingBooking(null)} 
-                onSubmit={(e, date) => { handleUpdate(e, updatingBooking.id, userToken, date); setUpdatingBooking(null); }}
+                onUpdate={(e, date) => { handleUpdate(e, updatingBooking.id, userToken, date); setUpdatingBooking(null); }}
+            />)
+        }
+
+        {   
+            (deletingBooking !== null) && (
+            <DeleteBookingPanel 
+                booking={deletingBooking} 
+                onClose={() => setDeletingBooking(null)} 
+                onDelete={(e) => { handleDelete(e, deletingBooking.id, userToken); setDeletingBooking(null); }}
             />)
         }
 

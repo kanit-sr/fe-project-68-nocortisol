@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function UpdateBookingPanel({ companyName, oldDate, onClose, onSubmit }: { companyName: string, oldDate: string, onClose: () => void, onSubmit: (e: React.MouseEvent, date: string) => void }) {
+export default function UpdateBookingPanel({ companyName, oldDate, onClose, onUpdate: onSubmit }: { companyName: string, oldDate: string, onClose: () => void, onUpdate: (e: React.MouseEvent, date: string) => void }) {
   // State to keep track of which date the user clicked.
   const [selectedDate, setSelectedDate] = useState(oldDate.split("-")[2].split("T")[0]);
   

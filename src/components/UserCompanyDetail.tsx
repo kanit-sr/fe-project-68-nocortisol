@@ -1,6 +1,6 @@
 "use client"
 import { CompanyItem } from "../../interfaces";
-import BookButton from "../app/companies/[cid]/BookButton";
+import BookButton from "@/components/BookButton";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -120,7 +120,7 @@ export default function UserCompanyDetail({
       {showBooking && (
         <div className="flex justify-center mt-4">
           {token ? (
-            <BookButton companyId={company.id} companyName={company.name} token={token} />
+            <BookButton company={company} token={token} />
           ) : (
             <p className="text-foreground/40 text-sm">
               Please{" "}

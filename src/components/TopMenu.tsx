@@ -47,7 +47,7 @@ export default function TopMenu() {
                         <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-auto">
                             <TopMenuItem 
                                 title="Profile" 
-                                pageRef="/profile" 
+                                pageRef="/api/auth/profile" 
                                 icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>}
                             />
                             <Link 
@@ -60,7 +60,7 @@ export default function TopMenu() {
 
                         : 
                         <Link 
-                            href="/login"
+                            href="/api/auth/login"
                             className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-full font-bold text-sm shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
                         >
                             Sign-In

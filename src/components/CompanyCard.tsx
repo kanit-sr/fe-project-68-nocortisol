@@ -9,7 +9,7 @@ interface Props {
 export default function CompanyCard({ company, isLoggedIn }: Props) {
   return (
     <Link
-      href={isLoggedIn ? `/companies/${company.id}` : "/login"}
+      href={isLoggedIn ? `/companies/${company.id}` : "/api/auth/login"}
       className="flex flex-col rounded-xl border border-surface-border bg-surface shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
     >
       {/* Top: logo + info side by side */}

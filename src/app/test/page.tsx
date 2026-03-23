@@ -18,7 +18,7 @@ export default async function Test() {
     const bookingsResponse = await getBookings(adminToken);
 
     return (
-        <main className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-8">
+        <main className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-8 pt-24">
             <div className="max-w-5xl mx-auto flex flex-col gap-12">
                 
 

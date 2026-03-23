@@ -11,7 +11,7 @@ export default function Home() {
           
           <div className="flex-1 space-y-8 text-center md:text-left">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tight leading-tight drop-shadow-sm">
-              ONLINE <span className="text-primary whitespace-nowrap">JOB FAIR</span> 2025
+              ONLINE <span className="text-primary whitespace-nowrap">JOB FAIR</span> 2022
             </h1>
             
             <p className="text-lg md:text-xl text-foreground/80 font-medium leading-relaxed mx-auto md:mx-0 max-w-2xl">
@@ -29,7 +29,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-1 w-full relative min-h-7.5 md:min-h-112.5">
+          <div className="flex-1 w-full relative min-h-75 sm:min-h-87.5 md:min-h-112.5">
              <Image 
               src="/images/interview.svg" 
               alt="Online Interview Illustration"

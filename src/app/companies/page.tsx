@@ -12,13 +12,13 @@ export default async function CompaniesPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="text-center pt-24 pb-6">
-        <h1 className="text-3xl font-bold text-primary tracking-wide">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-primary tracking-widest uppercase">
           Company Lists
         </h1>
-        <p className="mt-2 text-sm font-semibold tracking-widest text-foreground">
+        <p className="mt-2 text-sm font-bold tracking-widest uppercase text-foreground/90">
           Participating Companies in Online Job Fair 2022
         </p>
-        <p className="text-sm font-semibold tracking-widest text-gray-700">
+        <p className="text-sm font-semibold tracking-wide text-foreground/70">
           Explore leading companies and discover career opportunities waiting for you.
         </p>
       </div>

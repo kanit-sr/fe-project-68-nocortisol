@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { CompanyItem } from "../../interfaces";
 import CompanyCard from "./CompanyCard";
@@ -46,13 +45,13 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
             placeholder="Search companies"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 border border-primary rounded-full text-sm font-medium tracking-wide focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-11 pr-4 py-2.5 border border-primary rounded-full text-sm font-semibold tracking-widest text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
      {/* Section label */}
-        <div className="flex items-center gap-2 mb-4 text-primary font-bold tracking-wide text-base border-b border-surface-border pb-3">
+        <div className="flex items-center gap-2 mb-4 text-primary font-bold tracking-widest uppercase text-base border-b border-surface-border pb-3">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5"
@@ -72,7 +71,7 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
 
       {/* 3-column grid */}
       {filtered.length === 0 ? (
-        <p className="text-center text-sm font-semibold tracking-wide text-foreground/45 py-16">No companies found.</p>
+        <p className="text-center text-sm font-semibold tracking-widest uppercase text-foreground/45 py-16">No companies found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((company) => (

@@ -13,7 +13,7 @@ export default async function CompaniesPage() {
     <main className="min-h-screen bg-gray-50">
       <div className="text-center pt-24 pb-6">
         <h1 className="text-3xl font-bold text-orange-500 tracking-wide">
-          Comapany Lists
+          Company Lists
         </h1>
         <p className="mt-2 text-sm font-semibold tracking-widest text-gray-700">
           Participating Companies in Online Job Fair 2022
@@ -23,7 +23,7 @@ export default async function CompaniesPage() {
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 pb-16">
+      <div className="max-w-7xl mx-auto px-4 pb-16">
         <CompanyList companies={companies} isLoggedIn={!!session} />
       </div>
     </main>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { CompanyItem } from "../../interfaces";
 import CompanyCard from "./CompanyCard";
@@ -12,20 +13,32 @@ interface Props {
 export default function CompanyList({ companies, isLoggedIn }: Props) {
   const [query, setQuery] = useState("");
 
-  const filtered = companies.filter((c) =>
-    c.name.toLowerCase().includes(query.toLowerCase()) ||
-    c.province?.toLowerCase().includes(query.toLowerCase()) ||
-    c.district?.toLowerCase().includes(query.toLowerCase())
+  const filtered = companies.filter(
+    (c) =>
+      c.name.toLowerCase().includes(query.toLowerCase()) ||
+      c.province?.toLowerCase().includes(query.toLowerCase()) ||
+      c.district?.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
     <>
       {/* Search Bar */}
-      <div className="flex justify-center mb-5">
-        <div className="relative w-full max-w-md">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+      <div className="flex justify-center mb-8">
+        <div className="relative w-full max-w-lg">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+              />
             </svg>
           </span>
           <input
@@ -33,29 +46,44 @@ export default function CompanyList({ companies, isLoggedIn }: Props) {
             placeholder="Find company"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full pl-11 pr-4 py-2.5 border border-primary rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
-      {/* Order List label */}
-      <div className="flex items-center gap-2 mb-3 text-sm font-medium text-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-        </svg>
-        Order List
-      </div>
+     {/* Section label */}
+        <div className="flex items-center gap-2 mb-4 text-primary font-semibold text-base border-b border-surface-border pb-3">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+        >
+            <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
+            </svg>
+            Company
+        </div>
 
-      {/* Company Cards */}
-      <div className="flex flex-col gap-4">
-        {filtered.length === 0 ? (
-          <p className="text-center text-gray-400 py-16">No companies found.</p>
-        ) : (
-          filtered.map((company) => (
-            <CompanyCard key={company.id} company={company} isLoggedIn={isLoggedIn} />
-          ))
-        )}
-      </div>
+      {/* 3-column grid */}
+      {filtered.length === 0 ? (
+        <p className="text-center text-gray-400 py-16">No companies found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map((company) => (
+            <CompanyCard
+              key={company.id}
+              company={company}
+              isLoggedIn={isLoggedIn}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

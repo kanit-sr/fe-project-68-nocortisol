@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import updateCompany from "../../libs/updateCompany";
 import { CompanyItem } from "../../../interfaces";
 
@@ -22,10 +22,13 @@ export default function UpdateCompanyPanel({
   const [district, setDistrict] = useState(company.district);
   const [province, setProvince] = useState(company.province);
   const [postalcode, setPostalcode] = useState(company.postalcode);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    // Logo upload will be handled in the future
     await updateCompany(company.id, token, {
       name,
       description,
@@ -36,9 +39,22 @@ export default function UpdateCompanyPanel({
       province,
       postalcode
     });
-
     onUpdated();
     onClose();
+  };
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setLogoFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setLogoPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setLogoPreview(null);
+    }
   };
 
   return (
@@ -108,8 +124,37 @@ export default function UpdateCompanyPanel({
             <span className="text-xs tracking-widest" style={{ color: 'var(--primary)' }}>
               Upload logo
             </span>
-            <div className="rounded-md p-2" style={{ border: '2px solid var(--primary)' }}>
-              ⬆
+            <div
+              className="rounded-md p-2 flex flex-col items-center gap-2 cursor-pointer"
+              style={{ border: '2px solid var(--primary)' }}
+              onClick={() => fileInputRef.current?.click()}
+              title="Select logo file"
+            >
+              <span className="text-2xl">⬆</span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleLogoChange}
+              />
+              <span className="text-xs text-foreground/60">(Will be saved as <b>{company.id}.jpg</b> in public/images/)</span>
+              {logoPreview ? (
+                <img
+                  src={logoPreview}
+                  alt="Logo preview"
+                  className="mt-2 rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
+                  style={{ background: 'var(--surface)' }}
+                />
+              ) : (
+                <img
+                  src={`/images/${company.id}.jpg`}
+                  alt="Current logo"
+                  className="mt-2 rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
+                  style={{ background: 'var(--surface)' }}
+                  onError={e => (e.currentTarget.style.display = 'none')}
+                />
+              )}
             </div>
           </div>
 

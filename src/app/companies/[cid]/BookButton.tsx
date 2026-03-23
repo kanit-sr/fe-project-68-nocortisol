@@ -57,41 +57,48 @@ export default function BookButton({
 
             {/* Modal Overlay */}
             {open && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                    <div className="bg-background rounded-3xl shadow-2xl w-[90%] max-w-lg p-8 relative flex flex-col items-center border border-surface-border">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                    <div className="bg-surface border border-surface-border rounded-[2.5rem] p-8 md:p-12 max-w-2xl w-full relative flex flex-col items-center shadow-2xl">
 
                         {/* Close Button */}
                         <button
                             onClick={() => { setOpen(false); setSelectedDate(null); }}
-                            className="absolute top-4 right-5 text-primary text-2xl hover:text-primary-hover transition-colors"
+                            className="absolute top-8 right-8 text-primary hover:opacity-70 transition-opacity cursor-pointer"
                         >
-                            ↩
+                            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M9 14L4 9l5-5" />
+                                <path d="M4 9h10.5a5.5 5.5 0 015.5 5.5v.5" />
+                            </svg>
                         </button>
 
-                        {/* Title */}
-                        <h2 className="text-2xl font-bold text-primary tracking-widest mb-1">Booking</h2>
-                        <p className="text-2xl font-bold text-primary tracking-widest mb-6">{companyName}</p>
+                        {/* Headings */}
+                        <h2 className="text-4xl md:text-5xl font-extrabold text-primary tracking-widest mb-2 mt-4">
+                            Book Now
+                        </h2>
+                        <h3 className="text-xl md:text-2xl font-bold text-primary tracking-widest mb-10">
+                            {companyName}
+                        </h3>
 
                         {/* Date Cards */}
-                        <div className="flex gap-4 mb-4">
+                        <div className="flex gap-4 md:gap-6 mb-8">
                             {DATES.map((d) => (
                                 <button
                                     key={d.value}
                                     onClick={() => setSelectedDate(d.value)}
-                                    className={`flex flex-col items-center justify-center w-20 h-24 rounded-2xl font-bold text-white transition-all duration-200
-                                        ${selectedDate === d.value
-                                            ? "bg-primary-hover scale-105 shadow-lg ring-2 ring-primary"
-                                            : "bg-primary hover:bg-primary-hover hover:scale-105"
+                                    className={`flex flex-col items-center justify-center w-20 h-24 md:w-24 md:h-28 rounded-2xl transition-all duration-300 cursor-pointer
+                                        ${selectedDate === d.value 
+                                            ? "bg-primary text-white scale-105 ring-4 ring-primary/30 shadow-lg" 
+                                            : "bg-primary/5 text-foreground/50 border border-primary/10 hover:bg-primary hover:text-white hover:scale-105 hover:shadow-md"
                                         }`}
                                 >
-                                    <span className="text-3xl font-extrabold leading-none">{d.label}</span>
-                                    <span className="text-base mt-1">{d.month}</span>
+                                    <span className="text-3xl md:text-4xl font-bold">{d.label}</span>
+                                    <span className="text-sm md:text-base font-bold tracking-widest uppercase mt-1">{d.month}</span>
                                 </button>
                             ))}
                         </div>
 
                         {/* Hint */}
-                        <p className="text-foreground/50 tracking-widest text-sm mb-5">
+                        <p className="text-foreground font-bold text-xs md:text-sm tracking-widest uppercase mb-8 text-center">
                             Select your preferred interview date (May 10–13, 2022)
                         </p>
 
@@ -99,24 +106,25 @@ export default function BookButton({
                         <button
                             onClick={handleBook}
                             disabled={loading || !selectedDate}
-                            className="bg-primary hover:bg-primary-hover disabled:opacity-50 text-white font-bold px-16 py-3 rounded-xl transition-colors mb-4"
+                            className="bg-primary hover:bg-primary-hover disabled:opacity-50 text-white px-16 py-3 rounded-full font-bold text-xl tracking-widest shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 mb-8 cursor-pointer"
                         >
                             {loading ? "Booking..." : "Book"}
                         </button>
 
                         {/* Note */}
-                        <p className="text-foreground/50 tracking-widest text-sm mb-4">
-                        Your booking can be edited or deleted at a later time.
+                        <p className="text-foreground/80 text-xs font-bold tracking-widest mb-6 text-center">
+                            Your booking can be edited or deleted at a later time.
                         </p>
 
                         {/* Illustration */}
-                        <Image
-                            src="/images/resume.svg"
-                            alt="Resume illustration"
-                            width={140}
-                            height={140}
-                            className="mt-2"
-                        />
+                        <div className="relative w-24 h-32 md:w-32 md:h-40 -mb-8 md:-mb-12 pointer-events-none">
+                            <Image
+                                src="/images/resume.svg"
+                                alt="Resume illustration"
+                                fill
+                                className="object-contain"
+                            />
+                        </div>
 
                     </div>
                 </div>

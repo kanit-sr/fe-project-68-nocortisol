@@ -1,8 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import getCompany from "@/libs/getCompany";
-import { CompanyItem } from "../../../../interfaces";
-import BookButton from "./BookButton";
+import BookButton from "../../../components/BookButton";
 import Link from "next/link";
 
 export default async function CompanyDetailPage({ params }: { params: { cid: string } }) {
@@ -129,7 +128,7 @@ export default async function CompanyDetailPage({ params }: { params: { cid: str
                 {/* Book Button */}
                 <div className="flex justify-center mt-4">
                     {session ? (
-                        <BookButton companyId={company.id} companyName={company.name} token={session.user.token} />
+                        <BookButton company={company} token={session.user.token} />
                     ) : (
                         <p className="text-foreground/40 text-sm">
                             Please{" "}

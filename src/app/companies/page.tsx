@@ -10,12 +10,12 @@ export default async function CompaniesPage() {
   const companies: CompanyItem[] = companiesRes.data ?? [];
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-background">
       <div className="text-center pt-24 pb-6">
-        <h1 className="text-3xl font-bold text-orange-500 tracking-wide">
+        <h1 className="text-3xl font-bold text-primary tracking-wide">
           Company Lists
         </h1>
-        <p className="mt-2 text-sm font-semibold tracking-widest text-gray-700">
+        <p className="mt-2 text-sm font-semibold tracking-widest text-foreground">
           Participating Companies in Online Job Fair 2022
         </p>
         <p className="text-sm font-semibold tracking-widest text-gray-700">

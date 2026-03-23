@@ -1,8 +1,8 @@
 "use client"
 import { useState } from "react";
 import { BookingResponse, BookingItem } from "../../interfaces";
-import UpdateBookingPanel from "@/components/UpdateBookingPanel";
-import DeleteBookingPanel from "@/components/DeleteBookingPanel";
+import UpdateBookingPanel from "@/components/modals/UpdateBookingPanel";
+import DeleteBookingPanel from "@/components/modals/DeleteBookingPanel";
 import removeBooking from "@/libs/removeBooking";
 import updateBooking from "@/libs/updateBooking";
 

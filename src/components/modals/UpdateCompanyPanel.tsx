@@ -25,13 +25,17 @@ export default function UpdateCompanyPanel({
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [hoveredInput, setHoveredInput] = useState<string | null>(null);
+  const [logoHovered, setLogoHovered] = useState(false);
+  const [submitHovered, setSubmitHovered] = useState(false);
+  const [closeHovered, setCloseHovered] = useState(false);
 
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Logo upload will be handled in the future
       await updateCompany(company.id, token, {
         name,
         description,
@@ -45,7 +49,6 @@ export default function UpdateCompanyPanel({
       onUpdated();
       onClose();
     } catch (err) {
-      // Optionally handle error
       setLoading(false);
     }
   };
@@ -63,6 +66,15 @@ export default function UpdateCompanyPanel({
       setLogoPreview(null);
     }
   };
+
+  const inputStyle = (key: string): React.CSSProperties => ({
+    border: `2px solid var(--primary)`,
+    background: hoveredInput === key ? 'var(--surface-hover, rgba(0,0,0,0.04))' : 'var(--surface)',
+    color: 'var(--foreground)',
+    outline: 'none',
+    transition: 'background 0.18s, box-shadow 0.18s',
+    boxShadow: hoveredInput === key ? '0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent)' : 'none',
+  });
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.4)' }}>
@@ -83,8 +95,14 @@ export default function UpdateCompanyPanel({
         {/* Close */}
         <button
           onClick={onClose}
+          onMouseEnter={() => setCloseHovered(true)}
+          onMouseLeave={() => setCloseHovered(false)}
           className="absolute top-4 right-5 text-2xl"
-          style={{ color: 'var(--primary)' }}
+          style={{
+            color: 'var(--primary)',
+            transform: closeHovered ? 'scale(1.2) rotate(-10deg)' : 'scale(1)',
+            transition: 'transform 0.15s',
+          }}
         >
           ↩
         </button>
@@ -99,37 +117,31 @@ export default function UpdateCompanyPanel({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
 
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="Name"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Description"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={website} onChange={e => setWebsite(e.target.value)} placeholder="Website"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={tel} onChange={e => setTel(e.target.value)} placeholder="Telephone number"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={address} onChange={e => setAddress(e.target.value)} placeholder="Address"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={district} onChange={e => setDistrict(e.target.value)} placeholder="District"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={province} onChange={e => setProvince(e.target.value)} placeholder="Province"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
-
-          <input value={postalcode} onChange={e => setPostalcode(e.target.value)} placeholder="Postal Code"
-            className="rounded-md px-3 py-2 text-sm"
-            style={{ border: '2px solid var(--primary)', background: 'var(--surface)', color: 'var(--foreground)' }} />
+          {(
+            [
+              { key: 'name', value: name, setter: setName, placeholder: 'Name' },
+              { key: 'description', value: description, setter: setDescription, placeholder: 'Description' },
+              { key: 'website', value: website, setter: setWebsite, placeholder: 'Website' },
+              { key: 'tel', value: tel, setter: setTel, placeholder: 'Telephone number' },
+              { key: 'address', value: address, setter: setAddress, placeholder: 'Address' },
+              { key: 'district', value: district, setter: setDistrict, placeholder: 'District' },
+              { key: 'province', value: province, setter: setProvince, placeholder: 'Province' },
+              { key: 'postalcode', value: postalcode, setter: setPostalcode, placeholder: 'Postal Code' },
+            ] as const
+          ).map(({ key, value, setter, placeholder }) => (
+            <input
+              key={key}
+              value={value}
+              onChange={e => setter(e.target.value)}
+              placeholder={placeholder}
+              className="rounded-md px-3 py-2 text-sm"
+              style={inputStyle(key)}
+              onMouseEnter={() => setHoveredInput(key)}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={() => setHoveredInput(key)}
+              onBlur={() => setHoveredInput(null)}
+            />
+          ))}
 
           {/* Upload */}
           <div className="flex flex-col items-center gap-2 mt-3">
@@ -138,11 +150,28 @@ export default function UpdateCompanyPanel({
             </span>
             <div
               className="rounded-md p-2 flex flex-col items-center cursor-pointer"
-              style={{ border: '2px solid var(--primary)' }}
+              style={{
+                border: `2px solid var(--primary)`,
+                background: logoHovered ? 'color-mix(in srgb, var(--primary) 8%, transparent)' : 'transparent',
+                boxShadow: logoHovered ? '0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent)' : 'none',
+                transform: logoHovered ? 'scale(1.03)' : 'scale(1)',
+                transition: 'background 0.18s, box-shadow 0.18s, transform 0.18s',
+              }}
               onClick={() => fileInputRef.current?.click()}
+              onMouseEnter={() => setLogoHovered(true)}
+              onMouseLeave={() => setLogoHovered(false)}
               title="Select logo file"
             >
-              <span className="text-2xl">⬆</span>
+              <span
+                className="text-2xl"
+                style={{
+                  transform: logoHovered ? 'translateY(-2px)' : 'translateY(0)',
+                  display: 'inline-block',
+                  transition: 'transform 0.18s',
+                }}
+              >
+                ⬆
+              </span>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -173,7 +202,17 @@ export default function UpdateCompanyPanel({
           <button
             type="submit"
             className="py-2 rounded-lg mt-4 font-bold tracking-[0.2em]"
-            style={{ background: 'var(--primary)', color: 'white' }}
+            onMouseEnter={() => setSubmitHovered(true)}
+            onMouseLeave={() => setSubmitHovered(false)}
+            style={{
+              background: submitHovered
+                ? 'color-mix(in srgb, var(--primary) 80%, black)'
+                : 'var(--primary)',
+              color: 'white',
+              transform: submitHovered ? 'translateY(-1px)' : 'translateY(0)',
+              boxShadow: submitHovered ? '0 4px 16px color-mix(in srgb, var(--primary) 35%, transparent)' : 'none',
+              transition: 'background 0.18s, transform 0.15s, box-shadow 0.18s',
+            }}
           >
             Update
           </button>

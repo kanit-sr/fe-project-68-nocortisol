@@ -17,6 +17,10 @@ export default async function userLogIn(user: RegisterPayload): Promise<AuthResp
     });
 
     if (!response.ok) {
+        if (response.status === 400) {
+            const error = await response.json();
+            throw new Error(error.msg);
+        }
         throw new Error("Failed to register");
     }
 

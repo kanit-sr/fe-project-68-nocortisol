@@ -6,9 +6,11 @@ import { CompanyItem } from "../../interfaces";
 export default function BookButton({
     company,
     token,
+    isAdmin,
 }: {
     company: CompanyItem, 
-    token: string;
+    token: string, 
+    isAdmin: boolean
 }) {
     const [isBooking, setIsBooking] = useState(false);
         
@@ -28,6 +30,7 @@ export default function BookButton({
                     company={company}
                     token={token}
                     onClose={() => setIsBooking(false)}
+                    isAdmin={isAdmin}
                 />
             )}
         </>

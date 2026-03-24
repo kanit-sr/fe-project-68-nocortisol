@@ -8,11 +8,13 @@ import { ReactNode } from "react";
 export default function UserCompanyDetail({
   company,
   token,
+  isAdmin, 
   showBooking = true,
   footerActions
 }: {
   company: CompanyItem;
   token?: string;
+  isAdmin: boolean;
   showBooking?: boolean;
   footerActions?: ReactNode;
 }) {
@@ -149,7 +151,7 @@ export default function UserCompanyDetail({
       {showBooking && (
         <div className="flex flex-col items-center justify-center mt-4 w-full">
           {token ? (
-            <BookButton company={company} token={token} />
+            <BookButton company={company} token={token} isAdmin={isAdmin} />
           ) : (
             <p className="text-foreground/40 text-sm font-medium text-center">
               Please{" "}

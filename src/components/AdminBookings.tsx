@@ -90,8 +90,8 @@ export default function AdminBookings({bookingsResponse, adminToken}: {bookingsR
                                                                         onError={e => {
                                                                             e.currentTarget.style.display = 'none';
                                                                             const fallback = document.createElement('span');
-                                                                            fallback.className = 'text-foreground/50 font-bold text-center text-xs';
-                                                                            fallback.innerHTML = `LOGO<br />${booking.company?.name || 'Unknown'}`;
+                                                                            fallback.className = "";
+                                                                            fallback.innerHTML = "";
                                                                             e.currentTarget.parentNode?.appendChild(fallback);
                                                                         }}
                                                                     />

@@ -21,6 +21,7 @@ export default function AdminCompanyDetail({
       <UserCompanyDetail
         company={company}
         token={adminToken}
+        isAdmin={true}
         showBooking={true}
         footerActions={
           <>

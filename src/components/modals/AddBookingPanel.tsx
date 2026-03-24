@@ -6,10 +6,11 @@ import createBooking from "@/libs/createBooking";
 import { CompanyItem } from "../../../interfaces";
 import { useAppSelector } from "@/redux/store";
 
-export default function AddBookingPanel({ company, token, onClose }: {
+export default function AddBookingPanel({ company, token, onClose, isAdmin }: {
     company: CompanyItem,
     token: string,
-    onClose: () => void,
+    onClose: () => void, 
+    isAdmin: boolean
 }) {
 
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function AddBookingPanel({ company, token, onClose }: {
   
 
   const dates: string[] = ["10", "11", "12", "13"];
-  const isLimitReached = currentBookingCount >= 3;
+  const isLimitReached = currentBookingCount >= 3 && !isAdmin;
 
   const handleBookingSubmit = async (e: React.MouseEvent) => {
     e.stopPropagation();

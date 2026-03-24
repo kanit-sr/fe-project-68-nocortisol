@@ -18,7 +18,7 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
         {
             role === "admin"
             ? <AdminCompanyDetail company={company} adminToken={token} />
-            : <UserCompanyDetail company={company} token={token} />
+            : <UserCompanyDetail company={company} token={token} isAdmin={false} />
         }
         </main>
     );

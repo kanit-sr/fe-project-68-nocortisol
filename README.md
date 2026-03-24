@@ -2,6 +2,8 @@
 
 # NoCortisol
 
-# VERCEL LINK
-# [LINK](https://fe-project-68-nocortisol.vercel.app/)
+Online Job Fair Registration
 
+## Vercel link:
+
+[fe-project-68-nocortisol.vercel.app](https://fe-project-68-nocortisol.vercel.app)

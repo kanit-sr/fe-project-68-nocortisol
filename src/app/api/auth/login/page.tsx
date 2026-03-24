@@ -1,22 +1,25 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const res = await signIn("credentials", {
+    const res: SignInResponse | undefined = await signIn("credentials", {
       email,
       password,
       redirect: false,
@@ -32,104 +35,73 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* ── Left panel: hero image with orange overlay ── */}
-      <div
-        className="hidden lg:flex lg:w-[62%] relative items-end p-14"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Orange overlay */}
-        <div className="absolute inset-0 bg-primary opacity-75" />
+    <div className="min-h-screen flex bg-background">
+      
+      {/* ── Left panel: Hero image with gradient overlay ── */}
+      <div className="hidden lg:flex lg:w-[55%] relative flex-col justify-start px-16 xl:px-18 z-0 overflow-hidden">
+        {/* Background Image */}
+        <Image 
+            src="/images/bg_login.png"
+            alt="People working in office"
+            fill
+            priority
+            className="object-cover z-[-2]"
+        />
+        
+        {/* Gradient opacity overlay! */}
+        <div className="absolute inset-0 bg-linear-to-b from-primary/95 via-primary/80 to-primary/40 z-[-1]" />
 
-        {/* Text */}
-        <div className="relative z-10">
-          <h1
-            className="text-white font-black text-5xl leading-tight tracking-tight mb-4"
-            style={{ fontFamily: "'Georgia', serif" }}
-          >
+        {/* Text Content */}
+        <div className="relative mt-24 z-10 max-w-4xl">
+          <h1 className="text-white font-black text-5xl xl:text-5xl leading-tight tracking-widest mb-6 drop-shadow-sm">
             ONLINE JOB FAIR 2022
           </h1>
-          <p className="text-white text-sm tracking-widest leading-relaxed font-light">
-            Discover Opportunities. Connect with Top Companies.
-            <br />
+          <p className="text-white text-base xl:text-lg tracking-widest leading-loose font-medium drop-shadow-sm">
+            Discover Opportunities. Connect with Top Companies.<br />
             Book Your Interview Sessions and Start Your Career Journey Today.
           </p>
         </div>
       </div>
 
-      {/* ── Right panel: form ── */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-white px-8 py-12 relative overflow-hidden">
-        {/* Decorative blobs */}
-        <div className="absolute bottom-0 left-0 w-24 h-32 bg-primary rounded-tr-full opacity-90" />
-        <div className="absolute bottom-0 right-4 w-20 h-28 bg-primary-light rounded-tl-full opacity-80" />
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none select-none text-3xl opacity-60">
-          🧑‍💼
-        </div>
-
-        <div className="w-full max-w-sm relative z-10">
+      {/* ── Right panel: Login Form ── */}
+      <div className="flex-1 flex flex-col items-center bg-background px-8 pt-20 relative overflow-hidden">
+        
+        <div className="w-full max-w-sm relative z-10 flex flex-col h-full">
+          
           {/* Title */}
-          <div className="text-center mb-8">
-            <h2
-              className="text-4xl font-bold text-primary mb-1"
-              style={{ fontFamily: "'Georgia', serif" }}
-            >
+          <div className="text-center mt-6 mb-12">
+            <h2 className="text-4xl xl:text-5xl font-extrabold text-primary tracking-[0.15em] mb-3">
               Welcome
             </h2>
-            <p className="text-primary text-sm tracking-widest font-medium">
+            <p className="text-primary text-sm tracking-widest font-bold">
               Login with email
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            {/* Email Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-primary"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
+              <label className="flex items-center gap-2 text-sm text-primary mb-2 font-bold tracking-widest uppercase">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                Email ID
+                Email
               </label>
               <input
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-primary rounded px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-primary"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
-            {/* Password */}
+            {/* Password Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-primary"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
+              <label className="flex items-center gap-2 text-sm text-primary mb-2 font-bold tracking-widest uppercase">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 Password
               </label>
@@ -137,42 +109,46 @@ export default function LoginPage() {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-primary rounded px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-primary"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
-              <div className="text-right mt-1">
-                <a
-                  href="#"
-                  className="text-xs text-primary hover:underline italic"
-                >
-                  Forgot your password?
-                </a>
-              </div>
+
             </div>
 
             {error && (
-              <p className="text-red-500 text-xs text-center">{error}</p>
+              <p className="text-red-500 text-xs font-bold tracking-wider text-center">{error}</p>
             )}
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary hover:bg-primary-hover text-white font-bold tracking-widest uppercase text-sm py-2.5 rounded transition-colors disabled:opacity-50"
-            >
-              {loading ? "Signing in…" : "Login"}
-            </button>
+            {/* Submit Button */}
+            <div className="pt-4">
+                <button
+                type="submit"
+                disabled={loading}
+                className="w-1/2 mx-auto block bg-primary hover:bg-primary-hover text-white font-bold tracking-[0.2em] uppercase text-sm py-3 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+                >
+                {loading ? "..." : "LOGIN"}
+                </button>
+            </div>
+            
+            {/* Register Link */}
+            <p className="mt-4 text-center text-[10px] font-bold tracking-widest uppercase text-primary">
+              Don't have an account?{" "}
+              <Link href="/api/auth/register" className="font-extrabold hover:underline drop-shadow-sm">
+                Register
+              </Link>
+            </p>
           </form>
 
-          <p className="mt-4 text-center text-xs text-gray-500">
-            Don&apos;t have an account?{" "}
-            <a
-              href="/api/auth/register"
-              className="text-primary font-semibold hover:underline"
-            >
-              Register
-            </a>
-          </p>
+          {/* Bottom Vector Illustration */}
+          <div className="mt-auto pt-8 relative w-full h-48 md:h-56 flex justify-center pointer-events-none">
+            <Image 
+                src="/images/working-nomad.svg"
+                alt="Working Nomad Illustration"
+                fill
+                className="object-contain object-bottom"
+            />
+          </div>
+
         </div>
       </div>
     </div>

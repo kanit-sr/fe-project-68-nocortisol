@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { UserItem } from "../../interfaces";
 import createCompany from "@/libs/createCompany";
@@ -27,28 +27,148 @@ export default function AdminProfile({ user }: Props) {
   const [form, setForm] = useState<CompanyPayload>(initialForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errorField, setErrorField] = useState<string>("");
   const [success, setSuccess] = useState("");
+
+  // Refs for moving user focus automatically
+  const nameRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
+  const websiteRef = useRef<HTMLInputElement>(null);
+  const telRef = useRef<HTMLInputElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
+  const districtRef = useRef<HTMLInputElement>(null);
+  const provinceRef = useRef<HTMLInputElement>(null);
+  const postalcodeRef = useRef<HTMLInputElement>(null);
+
+  const refMap: Record<string, React.RefObject<HTMLInputElement | null>> = {
+    name: nameRef,
+    description: descriptionRef,
+    website: websiteRef,
+    tel: telRef,
+    address: addressRef,
+    district: districtRef,
+    province: provinceRef,
+    postalcode: postalcodeRef,
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear errors the moment they start typing to fix it
+    if (error) {
+      setError("");
+      setErrorField("");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user?.token) return;
+
+    // 1. Name Validation
+    if (form.name.trim().length === 0) {
+      setError("Please add a company name.");
+      setErrorField("name");
+      nameRef.current?.focus();
+      return;
+    }
+    if (form.name.trim().length > 50) {
+      setError("Company name cannot be more than 50 characters.");
+      setErrorField("name");
+      nameRef.current?.focus();
+      return;
+    }
+
+    // 2. Description Validation
+    if (form.description.trim().length === 0) {
+      setError("Please add a description.");
+      setErrorField("description");
+      descriptionRef.current?.focus();
+      return;
+    }
+
+    // 3. Website Validation
+    const websiteRegex = /^(?:https?:\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+    if (!websiteRegex.test(form.website)) {
+      setError("Please add a valid website URL.");
+      setErrorField("website");
+      websiteRef.current?.focus();
+      return;
+    }
+
+    // 4. Telephone Validation
+    const telRegex = /^0\d{8,9}$/;
+    if (!telRegex.test(form.tel.replace(/[-\s]/g, ""))) {
+      setError("Please add a valid telephone number.");
+      setErrorField("tel");
+      telRef.current?.focus();
+      return;
+    }
+
+    // 5. Address Validation
+    if (form.address.trim().length === 0) {
+      setError("Please add an address.");
+      setErrorField("address");
+      addressRef.current?.focus();
+      return;
+    }
+
+    // 6. District Validation
+    if (form.district.trim().length === 0) {
+      setError("Please add a district.");
+      setErrorField("district");
+      districtRef.current?.focus();
+      return;
+    }
+
+    // 7. Province Validation
+    if (form.province.trim().length === 0) {
+      setError("Please add a province.");
+      setErrorField("province");
+      provinceRef.current?.focus();
+      return;
+    }
+
+    // 8. Postal Code Validation (must be exactly 5 digits)
+    const postalcodeRegex = /^\d{5}$/;
+    if (!postalcodeRegex.test(form.postalcode)) {
+      setError("Postal code must be exactly 5 digits.");
+      setErrorField("postalcode");
+      postalcodeRef.current?.focus();
+      return;
+    }
+
     setLoading(true);
     setError("");
+    setErrorField("");
     setSuccess("");
+
     try {
       await createCompany(session.user.token, form);
       setSuccess("Company created successfully!");
       setForm(initialForm);
     } catch (err: any) {
-      setError(err?.message ?? "Failed to create company");
+      const errorMessage = err?.message ?? "Failed to create company";
+      setError(errorMessage);
+      // Focus name field on generic backend errors
+      if (errorMessage.toLowerCase().includes("name")) {
+        setErrorField("name");
+        nameRef.current?.focus();
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  const fields: { label: string; name: keyof CompanyPayload; type: string; placeholder: string }[] = [
+    { label: "Name", name: "name", type: "text", placeholder: "e.g. ABC Company" },
+    { label: "Description", name: "description", type: "text", placeholder: "e.g. Leading tech company in Thailand" },
+    { label: "Website", name: "website", type: "text", placeholder: "e.g. https://abc.com" },
+    { label: "Telephone number", name: "tel", type: "tel", placeholder: "e.g. 02-123-4567" },
+    { label: "Address", name: "address", type: "text", placeholder: "e.g. 123 Sukhumvit Rd." },
+    { label: "District", name: "district", type: "text", placeholder: "e.g. Khlong Toei" },
+    { label: "Province", name: "province", type: "text", placeholder: "e.g. Bangkok" },
+    { label: "Postal Code", name: "postalcode", type: "text", placeholder: "e.g. 10110" },
+  ];
 
   return (
     <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 px-6">
@@ -103,28 +223,24 @@ export default function AdminProfile({ user }: Props) {
           onSubmit={handleSubmit}
           className="w-full bg-surface/50 border border-surface-border rounded-3xl p-8 md:p-14 shadow-xl backdrop-blur-sm flex flex-col gap-5"
         >
-          {[
-            { label: "Name", name: "name", type: "text", placeholder: "e.g. ABC Company" },
-            { label: "Description", name: "description", type: "text", placeholder: "e.g. Leading tech company in Thailand" },
-            { label: "Website", name: "website", type: "text", placeholder: "e.g. https://abc.com" },
-            { label: "Telephone number", name: "tel", type: "tel", placeholder: "e.g. 02-123-4567" },
-            { label: "Address", name: "address", type: "text", placeholder: "e.g. 123 Sukhumvit Rd." },
-            { label: "District", name: "district", type: "text", placeholder: "e.g. Khlong Toei" },
-            { label: "Province", name: "province", type: "text", placeholder: "e.g. Bangkok" },
-            { label: "Postal Code", name: "postalcode", type: "text", placeholder: "e.g. 10110" },
-          ].map((field) => (
+          {fields.map((field) => (
             <div key={field.name} className="flex flex-col gap-1">
               <label className="text-foreground font-bold text-sm md:text-base tracking-widest">
                 {field.label}
               </label>
               <input
+                ref={refMap[field.name] as React.RefObject<HTMLInputElement>}
                 type={field.type}
                 name={field.name}
                 required
-                value={(form as any)[field.name]}
+                value={form[field.name]}
                 onChange={handleChange}
                 placeholder={field.placeholder}
-                className="w-full border border-primary rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className={`w-full border rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 transition-colors ${
+                  errorField === field.name
+                    ? "border-red-500 focus:ring-red-500 shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+                    : "border-primary focus:ring-primary"
+                }`}
               />
             </div>
           ))}

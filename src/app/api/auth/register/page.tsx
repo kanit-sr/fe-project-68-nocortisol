@@ -8,7 +8,6 @@ import userRegister from "@/libs/userRegister";
 import userLogIn from "@/libs/userLogIn";
 import { signIn } from "next-auth/react";
 
-
 export default function RegisterPage() {
   const router = useRouter();
   
@@ -91,7 +90,7 @@ export default function RegisterPage() {
 
     try {
       await userRegister({ name: form.name, email: form.email, tel: form.tel, password: form.password, role: "user" });
-
+      
       // Auto-login after successful registration
       const loginRes = await signIn("credentials", {
         email: form.email,
@@ -105,7 +104,7 @@ export default function RegisterPage() {
         router.replace("/");
         router.refresh();
       }
-
+      
     } catch (err: any) {
       
       const errorMessage = err?.message ?? "Registration failed";

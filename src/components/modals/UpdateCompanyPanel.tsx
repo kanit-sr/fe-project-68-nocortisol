@@ -137,7 +137,7 @@ export default function UpdateCompanyPanel({
               Upload logo
             </span>
             <div
-              className="rounded-md p-2 flex flex-col items-center gap-2 cursor-pointer"
+              className="rounded-md p-2 flex flex-col items-center cursor-pointer"
               style={{ border: '2px solid var(--primary)' }}
               onClick={() => fileInputRef.current?.click()}
               title="Select logo file"
@@ -150,19 +150,18 @@ export default function UpdateCompanyPanel({
                 className="hidden"
                 onChange={handleLogoChange}
               />
-              <span className="text-xs text-foreground/60">(Will be saved as <b>{company.id}.png</b> in public/images/)</span>
               {logoPreview ? (
                 <img
                   src={logoPreview}
                   alt="Logo preview"
-                  className="mt-2 rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
+                  className="rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
                   style={{ background: 'var(--surface)' }}
                 />
               ) : (
                 <img
                   src={`/images/${company.id}.png`}
                   alt="Current logo"
-                  className="mt-2 rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
+                  className="rounded-md border border-surface-border max-h-24 max-w-full object-contain bg-surface"
                   style={{ background: 'var(--surface)' }}
                   onError={e => (e.currentTarget.style.display = 'none')}
                 />

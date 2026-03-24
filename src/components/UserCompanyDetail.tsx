@@ -27,7 +27,7 @@ export default function UserCompanyDetail({
   };
 
   return (
-    <div className="bg-surface rounded-2xl shadow-md w-[98%] max-w-4xl p-4 sm:p-6 md:p-8 relative border border-surface-border">
+    <div className="bg-surface rounded-2xl shadow-md w-[98%] max-w-4xl p-4 sm:p-6 md:p-8 relative border border-surface-border mb-10">
 
       <Link
         href="/companies"

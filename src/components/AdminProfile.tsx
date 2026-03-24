@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { UserItem } from "../../interfaces";
-import createCompany, { CreateCompanyPayload } from "@/libs/createCompany";
+import createCompany from "@/libs/createCompany";
+import { CompanyPayload } from "../../interfaces";
 
 interface Props {
   user: UserItem;
 }
 
-const initialForm: CreateCompanyPayload = {
+const initialForm: CompanyPayload = {
   name: "",
   address: "",
   district: "",
@@ -23,7 +24,7 @@ const initialForm: CreateCompanyPayload = {
 
 export default function AdminProfile({ user }: Props) {
   const { data: session } = useSession();
-  const [form, setForm] = useState<CreateCompanyPayload>(initialForm);
+  const [form, setForm] = useState<CompanyPayload>(initialForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

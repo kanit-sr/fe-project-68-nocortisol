@@ -20,7 +20,8 @@ export default function AdminCompanyDetail({
     <>
       <UserCompanyDetail
         company={company}
-        showBooking={false}
+        token={adminToken}
+        showBooking={true}
         footerActions={
           <>
             <button

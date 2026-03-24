@@ -1,11 +1,54 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { UserItem } from "../../interfaces";
+import createCompany, { CreateCompanyPayload } from "@/libs/createCompany";
 
 interface Props {
   user: UserItem;
 }
 
+const initialForm: CreateCompanyPayload = {
+  name: "",
+  address: "",
+  district: "",
+  province: "",
+  postalcode: "",
+  tel: "",
+  website: "",
+  description: "",
+};
+
 export default function AdminProfile({ user }: Props) {
+  const { data: session } = useSession();
+  const [form, setForm] = useState<CreateCompanyPayload>(initialForm);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!session?.user?.token) return;
+    setLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      await createCompany(session.user.token, form);
+      setSuccess("Company created successfully!");
+      setForm(initialForm);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to create company");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 px-6">
 
@@ -49,33 +92,42 @@ export default function AdminProfile({ user }: Props) {
         </div>
       </div>
 
-      {/* ── Right: Create Company (UI only) ── */}
+      {/* ── Right: Create Company ── */}
       <div className="flex flex-col items-center">
         <h1 className="text-3xl md:text-4xl font-extrabold text-primary tracking-widest uppercase mb-10 drop-shadow-sm">
           Create Company
         </h1>
 
-        <div className="w-full bg-surface/50 border border-surface-border rounded-3xl p-8 md:p-14 shadow-xl backdrop-blur-sm flex flex-col gap-5">
-
+        <form
+          onSubmit={handleSubmit}
+          className="w-full bg-surface/50 border border-surface-border rounded-3xl p-8 md:p-14 shadow-xl backdrop-blur-sm flex flex-col gap-5"
+        >
           {[
-            { label: "Name", type: "text" },
-            { label: "Description", type: "text" },
-            { label: "Website", type: "text" },
-            { label: "Telephone number", type: "tel" },
-            { label: "Address", type: "text" },
+            { label: "Name", name: "name", type: "text" },
+            { label: "Description", name: "description", type: "text" },
+            { label: "Website", name: "website", type: "text" },
+            { label: "Telephone number", name: "tel", type: "tel" },
+            { label: "Address", name: "address", type: "text" },
+            { label: "District", name: "district", type: "text" },
+            { label: "Province", name: "province", type: "text" },
+            { label: "Postal Code", name: "postalcode", type: "text" },
           ].map((field) => (
-            <div key={field.label} className="flex flex-col gap-1">
+            <div key={field.name} className="flex flex-col gap-1">
               <label className="text-foreground font-bold text-sm md:text-base tracking-widest">
                 {field.label}
               </label>
               <input
                 type={field.type}
+                name={field.name}
+                required
+                value={(form as any)[field.name]}
+                onChange={handleChange}
                 className="w-full border border-primary rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           ))}
 
-          {/* Upload Logo */}
+          {/* Upload Logo — UI only for now */}
           <div className="flex flex-col items-center gap-2 pt-1">
             <span className="text-foreground font-bold text-sm md:text-base tracking-widest">
               Upload Logo
@@ -87,15 +139,18 @@ export default function AdminProfile({ user }: Props) {
             </div>
           </div>
 
-          {/* CREATE button */}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {success && <p className="text-green-500 text-sm text-center">{success}</p>}
+
           <button
-            type="button"
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold tracking-widest uppercase text-sm py-3 rounded-lg transition-colors mt-2"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-bold tracking-widest uppercase text-sm py-3 rounded-lg transition-colors mt-2"
           >
-            CREATE
+            {loading ? "Creating..." : "CREATE"}
           </button>
 
-        </div>
+        </form>
       </div>
 
     </div>

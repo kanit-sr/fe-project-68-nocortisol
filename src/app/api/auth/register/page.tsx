@@ -2,10 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import userRegister from "@/libs/userRegister";
 
 export default function RegisterPage() {
   const router = useRouter();
+  
   const [form, setForm] = useState({
     name: "",
     tel: "",
@@ -13,14 +16,15 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match");
@@ -30,7 +34,7 @@ export default function RegisterPage() {
     setError("");
     try {
       await userRegister({ name: form.name, email: form.email, tel: form.tel, password: form.password, role: "user" });
-      router.push("/login");
+      router.push("/api/auth/signin");
     } catch (err: any) {
       setError(err?.message ?? "Registration failed");
     } finally {
@@ -39,60 +43,54 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* ── Left panel: hero image with orange overlay ── */}
-      <div
-        className="hidden lg:flex lg:w-[62%] relative items-end p-14"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Orange overlay */}
-        <div className="absolute inset-0 bg-primary opacity-75" />
+    <div className="min-h-screen flex bg-background">
+      
+      {/* ── Left panel: Hero image with gradient overlay ── */}
+      <div className="hidden lg:flex lg:w-[55%] relative flex-col justify-start px-16 xl:px-18 z-0 overflow-hidden">
+        {/* Background Image */}
+        <Image 
+            src="/images/bg_login.png"
+            alt="People working in office"
+            fill
+            priority
+            className="object-cover z-[-2]"
+        />
+        
+        {/* Gradient opacity overlay! */}
+        <div className="absolute inset-0 bg-linear-to-b from-primary/95 via-primary/80 to-primary/40 z-[-1]" />
 
-        {/* Text content */}
-        <div className="relative z-10">
-          <h1 className="text-white font-black text-5xl leading-tight tracking-tight mb-4"
-            style={{ fontFamily: "'Georgia', serif", letterSpacing: "0.02em" }}>
+        {/* Text Content */}
+        <div className="relative mt-24 z-10 max-w-4xl">
+          <h1 className="text-white font-black text-5xl xl:text-5xl leading-tight tracking-widest mb-6 drop-shadow-sm">
             ONLINE JOB FAIR 2022
           </h1>
-          <p className="text-white text-sm tracking-widest leading-relaxed font-light">
+          <p className="text-white text-base xl:text-lg tracking-widest leading-loose font-medium drop-shadow-sm">
             Discover Opportunities. Connect with Top Companies.<br />
             Book Your Interview Sessions and Start Your Career Journey Today.
           </p>
         </div>
       </div>
 
-      {/* ── Right panel: form ── */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-white px-8 py-12 relative">
-        {/* Decorative blobs bottom */}
-        <div className="absolute bottom-0 left-0 w-24 h-32 bg-primary rounded-tr-full opacity-90" />
-        <div className="absolute bottom-0 right-4 w-20 h-28 bg-primary-light rounded-tl-full opacity-80" />
-        {/* Sitting person illustration placeholder */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 opacity-60 pointer-events-none select-none text-3xl">
-          🧑‍💼
-        </div>
-
-        <div className="w-full max-w-sm relative z-10">
+       {/* ── Right panel: Login Form ── */}
+      <div className="flex-1 flex flex-col items-center bg-background px-8 pt-20 relative overflow-hidden">
+        
+        <div className="w-full max-w-sm relative z-10 flex flex-col h-full">
+          
           {/* Title */}
-          <div className="text-center mb-6">
-            <h2
-              className="text-4xl font-bold text-primary mb-1"
-              style={{ fontFamily: "'Georgia', serif" }}
-            >
+          <div className="text-center mt-6 mb-12">
+            <h2 className="text-4xl xl:text-5xl font-extrabold text-primary tracking-[0.15em] mb-3">
               Welcome
             </h2>
-            <p className="text-primary text-sm tracking-widest uppercase font-medium">
+            <p className="text-primary text-sm tracking-widest font-bold">
               Register
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
+            
+            {/* Name Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
+              <label className="flex items-center gap-2 text-xs text-primary mb-1.5 font-bold tracking-widest uppercase">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -104,13 +102,13 @@ export default function RegisterPage() {
                 required
                 value={form.name}
                 onChange={handleChange}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
-            {/* Tel */}
+            {/* Tel Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
+              <label className="flex items-center gap-2 text-xs text-primary mb-1.5 font-bold tracking-widest uppercase">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
@@ -122,17 +120,17 @@ export default function RegisterPage() {
                 required
                 value={form.tel}
                 onChange={handleChange}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
-            {/* Email */}
+            {/* Email Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
+              <label className="flex items-center gap-2 text-xs text-primary mb-1.5 font-bold tracking-widest uppercase">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                Email ID
+                Email
               </label>
               <input
                 type="email"
@@ -140,13 +138,13 @@ export default function RegisterPage() {
                 required
                 value={form.email}
                 onChange={handleChange}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
-            {/* Password */}
+            {/* Password Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
+              <label className="flex items-center gap-2 text-xs text-primary mb-1.5 font-bold tracking-widest uppercase">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -158,13 +156,13 @@ export default function RegisterPage() {
                 required
                 value={form.password}
                 onChange={handleChange}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
-            {/* Confirm Password */}
+            {/* Confirm Password Field */}
             <div>
-              <label className="flex items-center gap-2 text-sm text-gray-700 mb-1 font-medium">
+              <label className="flex items-center gap-2 text-xs text-primary mb-1.5 font-bold tracking-widest uppercase">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -176,30 +174,44 @@ export default function RegisterPage() {
                 required
                 value={form.confirmPassword}
                 onChange={handleChange}
-                className="w-full border border-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border-2 border-primary/60 rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-0 focus:border-primary bg-transparent transition-colors"
               />
             </div>
 
             {error && (
-              <p className="text-red-500 text-xs text-center">{error}</p>
+              <p className="text-red-500 text-xs font-bold tracking-wider text-center">{error}</p>
             )}
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary hover:bg-primary-hover text-white font-bold tracking-widest uppercase text-sm py-2.5 rounded transition-colors disabled:opacity-50"
-            >
-              {loading ? "Creating account…" : "Register"}
-            </button>
+            {/* Submit Button */}
+            <div className="pt-2">
+                <button
+                type="submit"
+                disabled={loading}
+                className="w-1/2 mx-auto block bg-primary hover:bg-primary-hover text-white font-bold tracking-[0.2em] uppercase text-sm py-3 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer"
+                >
+                {loading ? "..." : "REGISTER"}
+                </button>
+            </div>
+            
+            {/* Login Link */}
+            <p className="mt-4 text-center text-[10px] font-bold tracking-widest uppercase text-primary">
+              Already have an account?{" "}
+              <Link href="/api/auth/signin" className="font-extrabold hover:underline drop-shadow-sm">
+                Login
+              </Link>
+            </p>
           </form>
 
-          <p className="mt-4 text-center text-xs text-gray-500">
-            Already have account?{" "}
-            <a href="/login" className="text-primary font-semibold hover:underline">
-              Login
-            </a>
-          </p>
+          {/* Bottom Vector Illustration - scaled down slightly to fit the longer form */}
+          <div className="mt-8 pt-8 relative w-full h-32 md:h-40 flex justify-center pointer-events-none">
+            <Image 
+                src="/images/working-nomad.svg"
+                alt="Working Nomad Illustration"
+                fill
+                className="object-contain object-bottom"
+            />
+          </div>
+
         </div>
       </div>
     </div>

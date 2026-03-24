@@ -150,7 +150,6 @@ export default function UpdateCompanyPanel({
             </span>
             <div
               className="rounded-md p-2 flex flex-col items-center cursor-pointer"
-<<<<<<< HEAD
               style={{
                 border: `2px solid var(--primary)`,
                 background: logoHovered ? 'color-mix(in srgb, var(--primary) 8%, transparent)' : 'transparent',
@@ -158,9 +157,7 @@ export default function UpdateCompanyPanel({
                 transform: logoHovered ? 'scale(1.03)' : 'scale(1)',
                 transition: 'background 0.18s, box-shadow 0.18s, transform 0.18s',
               }}
-=======
               style={{ border: '2px solid var(--primary)' }}
->>>>>>> 72675047d508d4bf4ce4e356743933fbc42be272
               onClick={() => fileInputRef.current?.click()}
               onMouseEnter={() => setLogoHovered(true)}
               onMouseLeave={() => setLogoHovered(false)}

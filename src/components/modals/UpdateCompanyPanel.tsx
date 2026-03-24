@@ -157,7 +157,6 @@ export default function UpdateCompanyPanel({
                 transform: logoHovered ? 'scale(1.03)' : 'scale(1)',
                 transition: 'background 0.18s, box-shadow 0.18s, transform 0.18s',
               }}
-              style={{ border: '2px solid var(--primary)' }}
               onClick={() => fileInputRef.current?.click()}
               onMouseEnter={() => setLogoHovered(true)}
               onMouseLeave={() => setLogoHovered(false)}

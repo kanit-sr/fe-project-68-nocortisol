@@ -5,6 +5,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import userRegister from "@/libs/userRegister";
+import userLogIn from "@/libs/userLogIn";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -34,7 +36,19 @@ export default function RegisterPage() {
     setError("");
     try {
       await userRegister({ name: form.name, email: form.email, tel: form.tel, password: form.password, role: "user" });
-      router.push("/api/auth/signin");
+      // Auto-login after successful registration
+      const loginRes = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false,
+      });
+      if (loginRes?.error) {
+        setError("Registration succeeded, but login failed: " + loginRes.error);
+        router.push("/api/auth/signin");
+      } else {
+        router.replace("/");
+        router.refresh();
+      }
     } catch (err: any) {
       setError(err?.message ?? "Registration failed");
     } finally {

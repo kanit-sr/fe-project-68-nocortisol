@@ -103,14 +103,14 @@ export default function AdminProfile({ user }: Props) {
           className="w-full bg-surface/50 border border-surface-border rounded-3xl p-8 md:p-14 shadow-xl backdrop-blur-sm flex flex-col gap-5"
         >
           {[
-            { label: "Name", name: "name", type: "text" },
-            { label: "Description", name: "description", type: "text" },
-            { label: "Website", name: "website", type: "text" },
-            { label: "Telephone number", name: "tel", type: "tel" },
-            { label: "Address", name: "address", type: "text" },
-            { label: "District", name: "district", type: "text" },
-            { label: "Province", name: "province", type: "text" },
-            { label: "Postal Code", name: "postalcode", type: "text" },
+            { label: "Name", name: "name", type: "text", placeholder: "e.g. ABC Company" },
+            { label: "Description", name: "description", type: "text", placeholder: "e.g. Leading tech company in Thailand" },
+            { label: "Website", name: "website", type: "text", placeholder: "e.g. https://abc.com" },
+            { label: "Telephone number", name: "tel", type: "tel", placeholder: "e.g. 02-123-4567" },
+            { label: "Address", name: "address", type: "text", placeholder: "e.g. 123 Sukhumvit Rd." },
+            { label: "District", name: "district", type: "text", placeholder: "e.g. Khlong Toei" },
+            { label: "Province", name: "province", type: "text", placeholder: "e.g. Bangkok" },
+            { label: "Postal Code", name: "postalcode", type: "text", placeholder: "e.g. 10110" },
           ].map((field) => (
             <div key={field.name} className="flex flex-col gap-1">
               <label className="text-foreground font-bold text-sm md:text-base tracking-widest">
@@ -122,6 +122,7 @@ export default function AdminProfile({ user }: Props) {
                 required
                 value={(form as any)[field.name]}
                 onChange={handleChange}
+                placeholder={field.placeholder}
                 className="w-full border border-primary rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>

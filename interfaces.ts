@@ -50,6 +50,17 @@ export interface CompanyResponse {
     data: CompanyItem[];
 }
 
+export interface CompanyPayload {
+  name: string;
+  address: string;
+  district: string;
+  province: string;
+  postalcode: string;
+  tel: string;
+  website: string;
+  description: string;
+}
+
 // ==========================================
 //                  BOOKINGS
 // ==========================================

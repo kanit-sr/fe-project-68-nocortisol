@@ -1,19 +1,8 @@
-import { CompanyItem } from "../../interfaces";
-
-export interface CreateCompanyPayload {
-  name: string;
-  address: string;
-  district: string;
-  province: string;
-  postalcode: string;
-  tel: string;
-  website: string;
-  description: string;
-}
+import { CompanyItem, CompanyPayload } from "../../interfaces";
 
 export default async function createCompany(
   token: string,
-  payload: CreateCompanyPayload
+  payload: CompanyPayload
 ): Promise<{ success: boolean; data: CompanyItem }> {
   const res = await fetch(`${process.env.BACKEND_URL}/api/v1/companies`, {
     method: "POST",
